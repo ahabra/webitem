@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <title>WebItem Visual Test</title>
+  </head>
+
+  <body>
+    <h1>Visually testing WebItem</h1>
+    <wi-simple></wi-simple>
+
+
+    <!-- JS code will be added to script element with 'data-app' attribute -->
+    <script data-app></script>
+
+    <script>
+      webitem.defineElement({
+        nameWithDash: 'wi-simple',
+        html: '<h3>Simple Web Item</h3>'
+      })
+    </script>
+  </body>
+</html>

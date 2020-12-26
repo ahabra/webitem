@@ -1,0 +1,34 @@
+{
+  "name": "webitem",
+  "version": "0.0.1",
+  "description": "Library to quickly create Custom Elements",
+  "author": "Abdul Habra",
+  "license": "Apache",
+  "main": "index.js",
+  "engines": {
+    "node": ">=15.0.0",
+    "npm": "7.0.0"
+  },
+  "scripts": {
+    "clean": "node scripts/clean.js",
+    "build": "node scripts/build.js",
+    "server": "node scripts/server.js",
+    "test": "web-test-runner",
+    "test:watch": "web-test-runner --watch",
+    "lint": "eslint src --fix"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.1.5",
+    "@web/test-runner": "^0.10.0",
+    "@web/test-runner-commands": "^0.2.1",
+    "@web/test-runner-puppeteer": "^0.7.3",
+    "chalk": "^2.4.1",
+    "esbuild": "^0.8.12",
+    "eslint": "^7.14.0",
+    "fs-extra": "^9.0.1",
+    "serve": "^11.3.2"
+  },
+  "dependencies": {
+    "@ahabra/data-bind": "^0.5.0"
+  }
+}
