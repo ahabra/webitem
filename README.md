@@ -1,6 +1,8 @@
 # webitem.js
 A library to make it easy to create HTML5 Custom Elements
 
+# UNDER DEVELOPMENT - DO NOT USE
+
 ## Project Directory Structure
 
 1. The root of the project conatins these files
