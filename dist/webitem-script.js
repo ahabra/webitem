@@ -2,7 +2,6 @@
 // https://github.com/ahabra/webitem
 // Copyright 2021 (C) Abdul Habra
 // Apache License Version 2.0
-// Build Time: Sat Dec 26 2020 00:02:57 GMT-0500 (Eastern Standard Time)
 
 
 var webitem = (() => {

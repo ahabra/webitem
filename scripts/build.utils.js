@@ -11,7 +11,6 @@ const banner = `// webitem.js Library to simplify creating HTML5 Custom Elements
 // https://github.com/ahabra/webitem
 // Copyright 2021 (C) Abdul Habra
 // Apache License Version 2.0
-// Build Time: ${new Date()}
 
 `
 
