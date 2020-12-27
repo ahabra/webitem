@@ -13,9 +13,9 @@ var webitem = (() => {
       __defProp(target, name, {get: all[name], enumerable: true});
   };
 
-  // src/index.js
-  var src_exports = {};
-  __export(src_exports, {
+  // src/webitem.js
+  var webitem_exports = {};
+  __export(webitem_exports, {
     defineElement: () => defineElement,
     defineProperty: () => defineProperty
   });
@@ -144,7 +144,7 @@ var webitem = (() => {
     }
   }
 
-  // src/index.js
+  // src/webitem.js
   function defineElement({nameWithDash, html, css, propertyList, eventHandlerList}) {
     const el = class extends HTMLElement {
       constructor() {
@@ -213,5 +213,5 @@ var webitem = (() => {
       return css;
     return `<style>${css}</style>`;
   }
-  return src_exports;
+  return webitem_exports;
 })();

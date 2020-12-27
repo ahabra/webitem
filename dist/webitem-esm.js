@@ -37,7 +37,7 @@ function htmlToNodes(html) {
   return Array.prototype.slice.call(template.content.childNodes);
 }
 
-// src/index.js
+// src/webitem.js
 import bind from "@ahabra/data-bind";
 function defineElement({nameWithDash, html, css, propertyList, eventHandlerList}) {
   const el = class extends HTMLElement {
