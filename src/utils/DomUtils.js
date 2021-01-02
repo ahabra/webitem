@@ -1,3 +1,4 @@
+import * as ObjectUtils from './ObjectUtils.js'
 
 export function elById(id) {
   return document.getElementById(id)
@@ -40,4 +41,18 @@ export function htmlToNodes(html) {
   const template = document.createElement('template')
   template.innerHTML = html
   return Array.prototype.slice.call(template.content.childNodes)
+}
+
+export function createElement({name, attributes, content}) {
+  if (!name) return null
+
+  const atts = [name]
+  ObjectUtils.forEachEntry(attributes, (k, v) => {
+    atts.push(`${k}="${v}"`)
+  })
+  const all = atts.join(' ')
+  const html = `<${all}>${content}</name>`
+  const nodes = htmlToNodes(html)
+  if (nodes.length === 0) return null
+  return nodes[0]
 }

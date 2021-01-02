@@ -5,7 +5,9 @@
 
   <body>
     <h1>Visually testing WebItem</h1>
-    <wi-simple></wi-simple>
+    <wi-t1></wi-t1>
+    <wi-t2></wi-t2>
+    <wi-t3>bold</wi-t3>
 
 
     <!-- JS code will be added to script element with 'data-app' attribute -->
@@ -13,9 +15,24 @@
 
     <script>
       webitem.defineElement({
-        nameWithDash: 'wi-simple',
+        nameWithDash: 'wi-t1',
         html: '<h3>Simple Web Item</h3>'
       })
+
+      webitem.defineElement({
+        nameWithDash: 'wi-t2',
+        html: '<h1>42</h1>',
+        css: 'h1 { color: red; }'
+      })
+
+      webitem.defineElement({
+        nameWithDash: 'wi-t3',
+        html: el => {
+          const h = el.innerHTML
+          return `<b>${h}</b>`
+        }
+      })
+
     </script>
   </body>
 </html>
