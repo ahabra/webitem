@@ -8,6 +8,7 @@
     <wi-t1></wi-t1>
     <wi-t2></wi-t2>
     <wi-t3>bold</wi-t3>
+    <wi-t5></wi-t5>
 
 
     <!-- JS code will be added to script element with 'data-app' attribute -->
@@ -31,6 +32,23 @@
           const h = el.innerHTML
           return `<b>${h}</b>`
         }
+      })
+
+      webitem.defineElement({
+        nameWithDash: 'wi-t5',
+        html : `
+        <div style="background-color:beige">
+          <h3>Bound Properties</h3>
+          In the browser's console, inspect <b><code>$('wi-t5').properties</code></b>
+          <p>Country: <input id="country" type="text"></p>
+          <p>Capital: <input id="capital" type="text"></p>
+        </div>
+        `,
+        propertyList: [
+          {name: 'country', value:'Syria', sel: '#country'},
+          {name: 'capital', value:'Damascuss', sel:'#capital'},
+          {name: 'style', value:'color:green', sel:'h3', attr:'style'}
+        ]
       })
 
     </script>
