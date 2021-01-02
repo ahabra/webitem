@@ -57,7 +57,7 @@ describe('webitem', () => {
       expect(found.properties.p1).to.equal(10)
     })
 
-    it('creates element with bound properties', () => {
+    describe('bounded properties', () => {
       const nameWithDash = 'wi-t5'
       const propertyList = [
         {name: 'country', value: 'Syria', sel: '#country'},
@@ -73,26 +73,31 @@ describe('webitem', () => {
       `
       webitem.defineElement({nameWithDash, html, propertyList})
       createAndAddElement(nameWithDash)
-
-      // verify properties
       const found = findElementByName(nameWithDash)
-      expect(found.properties.country).to.equal('Syria')
-      expect(found.properties.capital).to.equal('Damascus')
-      expect(found.properties.style).to.equal('color:green')
-
-      // verify DOM elements
       const country = DomUtils.select('#country', found.shadowRoot)[0]
-      expect(country.value).to.equal('Syria')
-      const h3 = DomUtils.select('h3', found.shadowRoot)[0]
-      expect(h3.style.color).to.equal('green')
 
-      // Verify 2-way binding
-      found.properties.country = 'Japan'
-      expect(country.value).to.equal('Japan')
+      it('populates properties values', () => {
+        expect(found.properties.country).to.equal('Syria')
+        expect(found.properties.capital).to.equal('Damascus')
+        expect(found.properties.style).to.equal('color:green')
+      })
 
-      country.value = 'USA'
-      expect(found.properties.country).to.equal('USA')
+      it('populates DOM elements from properties', () => {
+        expect(country.value).to.equal('Syria')
+        const h3 = DomUtils.select('h3', found.shadowRoot)[0]
+        expect(h3.style.color).to.equal('green')
+      })
+
+      it('supports 2-way binding', () => {
+        found.properties.country = 'Japan'
+        expect(country.value).to.equal('Japan')
+
+        country.value = 'USA'
+        expect(found.properties.country).to.equal('USA')
+      })
+
     })
+
 
   })
 
