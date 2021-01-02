@@ -98,11 +98,41 @@ describe('webitem', () => {
 
     })
 
+    describe('event handling', () => {
+      const nameWithDash = 'wi-t6'
+      const html = `
+        <div>
+          <h3>wi-t6 - Events</h3>
+          <button>Click Me</button>
+          <span id="counter">0<span>
+        </div>
+      `
+      const propertyList = [ {name: 'counter', value: '0', sel: '#counter'} ]
 
-  })
+      function listener(ev, el) {
+        const counter = parseInt(el.properties.counter, 10)
+        el.properties.counter = counter + 1
+      }
 
+      const eventHandlerList = [ {sel: 'button', eventName: 'click', listener} ]
 
-})
+      webitem.defineElement({nameWithDash, html, propertyList, eventHandlerList})
+      createAndAddElement(nameWithDash)
+
+      it('listens to events', () => {
+        const found = findElementByName(nameWithDash)
+        expect(found.properties.counter).to.equal('0')
+        const button = DomUtils.select('button', found.shadowRoot)[0]
+        button.click()
+        button.click()
+        expect(found.properties.counter).to.equal('2')
+      })
+
+    })
+
+  })  // defineElement
+
+}) // webitem
 
 function findElementByName(name) {
   const found = document.getElementsByTagName(name)

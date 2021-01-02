@@ -7,38 +7,56 @@
     <h1>Visually testing WebItem</h1>
     <wi-t1></wi-t1>
     <wi-t2></wi-t2>
-    <wi-t3>bold</wi-t3>
+    <wi-t3>Make me italic</wi-t3>
     <wi-t5></wi-t5>
+    <wi-t6></wi-t6>
 
 
     <!-- JS code will be added to script element with 'data-app' attribute -->
     <script data-app></script>
 
     <script>
+      const color1 = '#f8f8e6'
+      const color2 = '#dcdcc6'
+
       webitem.defineElement({
         nameWithDash: 'wi-t1',
-        html: '<h3>Simple Web Item</h3>'
+        html: `
+        <div style="background-color:${color1}">
+        <h3>wi-t1 Simple Web Item</h3>
+        </div>
+        `
       })
 
       webitem.defineElement({
         nameWithDash: 'wi-t2',
-        html: '<h1>42</h1>',
-        css: 'h1 { color: red; }'
+        html: `
+        <div style="background-color:${color2}">
+          <h3>wi-t2 Web Item with CSS</h3>
+          <h4>42</h4>
+        </div>
+        `,
+        css: 'h4 { color: red; }'
       })
 
       webitem.defineElement({
         nameWithDash: 'wi-t3',
         html: el => {
           const h = el.innerHTML
-          return `<b>${h}</b>`
+          return `
+            <div style="background-color:${color1}">
+              <h3>wi-t3 Html Function</h3>
+              <i>${h}</i>
+            </div>
+          `
         }
       })
 
       webitem.defineElement({
         nameWithDash: 'wi-t5',
-        html : `
-        <div style="background-color:beige">
-          <h3>Bound Properties</h3>
+        html: `
+        <div style="background-color:${color2}">
+          <h3>wi-t5 - Bound Properties</h3>
           In the browser's console, inspect <b><code>$('wi-t5').properties</code></b>
           <p>Country: <input id="country" type="text"></p>
           <p>Capital: <input id="capital" type="text"></p>
@@ -51,6 +69,30 @@
         ]
       })
 
+      webitem.defineElement({
+        nameWithDash: 'wi-t6',
+        html: `
+          <div style="background-color:${color1}">
+            <h3>wi-t6 - Events</h3>
+            <button>Click Me</button>
+            <span id="counter">0<span>
+          </div>
+          `,
+        propertyList: [
+          {name: 'counter', value: '0', sel:'#counter'}
+        ],
+        eventHandlerList: [
+          {
+            sel: 'button',
+            eventName: 'click',
+            listener: (ev, el) => {
+              const counter = parseInt(el.properties.counter, 10)
+              el.properties.counter = counter + 1
+            }
+          }
+        ]
+
+      })
     </script>
   </body>
 </html>
