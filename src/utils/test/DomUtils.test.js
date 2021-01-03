@@ -22,4 +22,26 @@ describe('DomUtils', ()=> {
     })
   })
 
+  describe('tag', ()=> {
+    it('creates html for a tag with attributes', ()=> {
+      const name = 'p'
+      const attributes = {
+        width: '10',
+        color: 'blue'
+      }
+      const content = 'foo'
+      const tag = DomUtils.tag({name, attributes, content})
+      const expected = '<p width="10" color="blue">foo</p>'
+      expect(tag).to.equal(expected)
+    })
+
+    it('creates html for a tag with no attributes', ()=> {
+      const name = 'p'
+      const content = 'foo'
+      const tag = DomUtils.tag({name, content})
+      const expected = '<p>foo</p>'
+      expect(tag).to.equal(expected)
+    })
+  })
+
 })

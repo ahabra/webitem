@@ -15,13 +15,15 @@ import bind from '@ahabra/data-bind'
  * definition consists of {name, value, [sel], [attr]}
  * eventHandlerList: Optional. Array. Objects defining event handlers of element. Each
  * handler definition consists of {sel, eventName, listener}
+ * display: Optional. String. CSS display attribute. One of inline (default), inline-block, block.
  */
-export function defineElement({nameWithDash, html, css, propertyList, eventHandlerList}) {
+export function defineElement({nameWithDash, html, css, display,
+  propertyList, eventHandlerList}) {
 
   const el = class extends HTMLElement {
     constructor() {
       super()
-      addHtml(this, html, css)
+      addHtml(this, html, css, display)
       this.properties = bindProperties(this, propertyList)
       addEventListeners(this, eventHandlerList)
     }
@@ -71,11 +73,11 @@ function addEventListeners(root, eventHandlerList) {
   })
 }
 
-function addHtml(root, html, css) {
+function addHtml(root, html, css, display) {
   html = getHtml(root, html)
 
   const shadow = root.attachShadow({mode: 'open'})
-  const nodes = DomUtils.htmlToNodes(getCss(css) + html)
+  const nodes = DomUtils.htmlToNodes(getCss(css, display) + html)
   shadow.append(...nodes)
 }
 
@@ -83,13 +85,28 @@ function getHtml(root, html) {
   return ObjectUtils.isFunction(html) ? html(root) : html
 }
 
-function getCss(css) {
-  if (!css) return ''
-  css = css.trim()
+function getCss(css, display) {
+  return displayStyle(display) + buildCss(css)
+}
+
+function buildCss(css) {
+  css = StringUtils.trim(css)
   if (css.length === 0) return ''
 
-  if (StringUtils.startsWith(css, '<style>', false)) return css
+  if (!StringUtils.startsWith(css, '<style>', false)) {
+    css = DomUtils.tag({name: 'style', content: css})
+  }
+  return css
+}
 
-  return `<style>${css}</style>`
+function displayStyle(display) {
+  display = StringUtils.trim(display)
+  if (display.length === 0) return ''
+  return `
+  <style>
+    :host { display: ${display};}
+    :host([hidden]) {display: none;}
+  </style>
+  `
 }
 

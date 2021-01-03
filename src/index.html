@@ -10,6 +10,8 @@
     <wi-t3>Make me italic</wi-t3>
     <wi-t5></wi-t5>
     <wi-t6></wi-t6>
+    <wi-t7></wi-t7>
+    <wi-t7></wi-t7>
 
 
     <!-- JS code will be added to script element with 'data-app' attribute -->
@@ -23,7 +25,7 @@
         nameWithDash: 'wi-t1',
         html: `
         <div style="background-color:${color1}">
-        <h3>wi-t1 Simple Web Item</h3>
+          <h3>wi-t1 Simple Web Item</h3>
         </div>
         `
       })
@@ -93,6 +95,19 @@
         ]
 
       })
+
+      webitem.defineElement({
+        nameWithDash: 'wi-t7',
+        html: `
+        <div style="background-color:${color2}">
+          <h3>wi-t7 Web Item with display = inline-block</h3>
+          Using display attribute
+        </div>
+        `,
+        display: 'inline-block'
+      })
+
+
     </script>
   </body>
 </html>

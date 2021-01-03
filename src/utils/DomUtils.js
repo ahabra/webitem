@@ -44,15 +44,21 @@ export function htmlToNodes(html) {
 }
 
 export function createElement({name, attributes, content}) {
-  if (!name) return null
-
-  const atts = [name]
-  ObjectUtils.forEachEntry(attributes, (k, v) => {
-    atts.push(`${k}="${v}"`)
-  })
-  const all = atts.join(' ')
-  const html = `<${all}>${content}</name>`
+  const html = tag({name, attributes, content})
+  if (html === null) return null
   const nodes = htmlToNodes(html)
   if (nodes.length === 0) return null
   return nodes[0]
+}
+
+export function tag({name, attributes, content}) {
+  if (!name) return null
+  const attArray = []
+  ObjectUtils.forEachEntry(attributes, (k, v) => {
+    attArray.push(`${k}="${v}"`)
+  })
+  const sep = attArray.length > 0 ? ' ' : ''
+  const atts = attArray.join(' ')
+
+  return `<${name}${sep}${atts}>${content}</${name}>`
 }
