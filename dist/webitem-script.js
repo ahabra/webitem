@@ -21,11 +21,25 @@ var webitem = (() => {
   });
 
   // src/utils/ObjectUtils.js
+  function isString(s) {
+    return isType(s, "String");
+  }
   function isFunction(f) {
     return isType(f, "Function");
   }
   function isType(v, type) {
     return Object.prototype.toString.call(v) === `[object ${type}]`;
+  }
+  function forEachEntry(object, func) {
+    if (!object || !func)
+      return;
+    if (Array.isArray(object)) {
+      object.forEach((v, index) => {
+        func(index, v);
+      });
+      return;
+    }
+    Object.entries(object).forEach((p) => func(p[0], p[1]));
   }
 
   // src/utils/StringUtils.js
@@ -35,6 +49,17 @@ var webitem = (() => {
     }
     const start = st.substring(0, search.length).toLowerCase();
     return search.toLowerCase() === start;
+  }
+  function trim(s) {
+    if (isEmpty(s))
+      return "";
+    if (!isString(s)) {
+      s = String(s);
+    }
+    return s.trim(s);
+  }
+  function isEmpty(s) {
+    return s === void 0 || s === null || s === "";
   }
 
   // src/utils/DomUtils.js
@@ -51,6 +76,17 @@ var webitem = (() => {
     const template = document.createElement("template");
     template.innerHTML = html;
     return Array.prototype.slice.call(template.content.childNodes);
+  }
+  function tag({name, attributes, content}) {
+    if (!name)
+      return null;
+    const attArray = [];
+    forEachEntry(attributes, (k, v) => {
+      attArray.push(`${k}="${v}"`);
+    });
+    const sep = attArray.length > 0 ? " " : "";
+    const atts = attArray.join(" ");
+    return `<${name}${sep}${atts}>${content}</${name}>`;
   }
 
   // node_modules/@ahabra/data-bind/dist/data-bind-module.js
@@ -145,11 +181,18 @@ var webitem = (() => {
   }
 
   // src/webitem.js
-  function defineElement({nameWithDash, html, css, propertyList, eventHandlerList}) {
+  function defineElement({
+    nameWithDash,
+    html,
+    css,
+    display,
+    propertyList,
+    eventHandlerList
+  }) {
     const el = class extends HTMLElement {
       constructor() {
         super();
-        addHtml(this, html, css);
+        addHtml(this, html, css, display);
         this.properties = bindProperties(this, propertyList);
         addEventListeners(this, eventHandlerList);
       }
@@ -194,24 +237,37 @@ var webitem = (() => {
       });
     });
   }
-  function addHtml(root, html, css) {
+  function addHtml(root, html, css, display) {
     html = getHtml(root, html);
     const shadow = root.attachShadow({mode: "open"});
-    const nodes = htmlToNodes(getCss(css) + html);
+    const nodes = htmlToNodes(getCss(css, display) + html);
     shadow.append(...nodes);
   }
   function getHtml(root, html) {
     return isFunction(html) ? html(root) : html;
   }
-  function getCss(css) {
-    if (!css)
-      return "";
-    css = css.trim();
+  function getCss(css, display) {
+    return displayStyle(display) + buildCss(css);
+  }
+  function buildCss(css) {
+    css = trim(css);
     if (css.length === 0)
       return "";
-    if (startsWith(css, "<style>", false))
-      return css;
-    return `<style>${css}</style>`;
+    if (!startsWith(css, "<style>", false)) {
+      css = tag({name: "style", content: css});
+    }
+    return css;
+  }
+  function displayStyle(display) {
+    display = trim(display);
+    if (display.length === 0)
+      return "";
+    return `
+  <style>
+    :host { display: ${display};}
+    :host([hidden]) {display: none;}
+  </style>
+  `;
   }
   return webitem_exports;
 })();

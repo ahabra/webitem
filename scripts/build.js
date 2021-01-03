@@ -8,11 +8,14 @@ if (!buildUtils.checkNodeVersion(15)) {
 }
 
 buildUtils.clean()
+Print.info('Generate files to target/out/ ...')
 buildUtils.copyIndexHtml()
 const b1 = buildUtils.build({format: 'esm', external: ['@ahabra/data-bind'], fileNameSuffix: 'esm'})
 const b2 = buildUtils.build({format: 'iife', external: [], fileNameSuffix: 'script'})
 const b3 = buildUtils.build({format: 'iife', minify: true, external: [], fileNameSuffix: 'script-min'})
 
+
 Promise.all([b1, b2, b3]).then( () => {
+  Print.info('Copy files to dist/ ...')
   buildUtils.copyDist()
 })
