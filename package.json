@@ -9,7 +9,7 @@
   "keywords": ["web component", "custom element"],
   "engines": {
     "node": ">=15.0.0",
-    "npm": "7.0.0"
+    "npm": ">=7.0.0"
   },
   "scripts": {
     "clean": "node scripts/clean.js",
