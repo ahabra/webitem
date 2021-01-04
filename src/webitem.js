@@ -3,8 +3,6 @@ import * as StringUtils from './utils/StringUtils.js'
 import * as DomUtils from './utils/DomUtils.js'
 import bind from '@ahabra/data-bind'
 
-// TODO Elaborate on the docs
-// TODO apply suggestions from https://developers.google.com/web/fundamentals/web-components/best-practices
 /**
  * Define a custom element
  * @param options An object containing the following fields
@@ -30,10 +28,6 @@ export function defineElement({nameWithDash, html, css, display,
   }
 
   customElements.define(nameWithDash, el)
-}
-
-export function defineProperty(name, value, sel, attr) {
-  return {name, value, sel, attr}
 }
 
 function bindProperties(root, propertyList) {

@@ -1,5 +1,5 @@
 # webitem.js Developer's Info
-A library to make it easy to create HTML5 Custom Elements.
+A library to simplify creating HTML5 Web Components.
 This file contains info to help the developer of the library.
 
 

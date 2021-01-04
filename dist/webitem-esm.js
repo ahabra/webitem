@@ -93,9 +93,6 @@ function defineElement({
   };
   customElements.define(nameWithDash, el);
 }
-function defineProperty(name, value, sel, attr) {
-  return {name, value, sel, attr};
-}
 function bindProperties(root, propertyList) {
   const result = {};
   if (!validatePropertyList(propertyList))
@@ -164,6 +161,5 @@ function displayStyle(display) {
   `;
 }
 export {
-  defineElement,
-  defineProperty
+  defineElement
 };

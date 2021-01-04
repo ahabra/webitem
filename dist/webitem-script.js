@@ -16,8 +16,7 @@ var webitem = (() => {
   // src/webitem.js
   var webitem_exports = {};
   __export(webitem_exports, {
-    defineElement: () => defineElement,
-    defineProperty: () => defineProperty
+    defineElement: () => defineElement
   });
 
   // src/utils/ObjectUtils.js
@@ -198,9 +197,6 @@ var webitem = (() => {
       }
     };
     customElements.define(nameWithDash, el);
-  }
-  function defineProperty(name, value, sel, attr) {
-    return {name, value, sel, attr};
   }
   function bindProperties(root, propertyList) {
     const result = {};
