@@ -1,12 +1,15 @@
 {
   "name": "@ahabra/webitem",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Library to simplify crerating Web Components/Custom Elements",
   "author": "Abdul Habra",
   "license": "Apache",
   "repository": "ahabra/webitem",
   "main": "dist/webitem-esm.js",
-  "keywords": ["web component", "custom element"],
+  "keywords": [
+    "web component",
+    "custom element"
+  ],
   "engines": {
     "node": ">=15.0.0",
     "npm": ">=7.0.0"
