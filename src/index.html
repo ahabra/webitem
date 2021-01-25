@@ -12,6 +12,7 @@
     <wi-t6></wi-t6>
     <wi-t7></wi-t7>
     <wi-t7></wi-t7>
+    <wi-t8></wi-t8>
 
 
     <!-- JS code will be added to script element with 'data-app' attribute -->
@@ -20,6 +21,8 @@
     <script>
       const color1 = '#f8f8e6'
       const color2 = '#dcdcc6'
+      const colors = ['Aqua', 'Beige', 'Blue', 'Cyan', 'Gold', 'Gray', 'Green', 'Orange', 'Red', 'Yellow']
+
 
       webitem.defineElement({
         nameWithDash: 'wi-t1',
@@ -107,6 +110,34 @@
         display: 'inline-block'
       })
 
+      webitem.defineElement({
+        nameWithDash: 'wi-t8',
+        html: `
+        <div style="background-color:${color1}">
+          <h3>wi-t8 - Actions</h3>
+          <button>Click Me</button>
+        </div>
+        `,
+        propertyList: [
+          {name: 'color', value: 'green', sel:'button', attr: 'style'}
+        ],
+        eventHandlerList: [
+          {
+            sel: 'button',
+            eventName: 'click',
+            listener: (ev, el) => {
+              el.actions.updateColor(el)
+            }
+          }
+        ],
+        actionList:[
+          {name: 'updateColor', action: function(el) {
+            const index = Math.floor(Math.random() * colors.length)
+            el.properties.color = `background-color:${colors[index]}`
+          }}
+        ]
+
+      })
 
     </script>
   </body>

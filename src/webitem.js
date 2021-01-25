@@ -16,17 +16,17 @@ import bind from '@ahabra/data-bind'
  * display: Optional. String. CSS display attribute. One of inline (default), inline-block, block.
  */
 export function defineElement({nameWithDash, html, css, display,
-  propertyList, eventHandlerList}) {
+  propertyList, eventHandlerList, actionList}) {
 
   const el = class extends HTMLElement {
     constructor() {
       super()
       addHtml(this, html, css, display)
       this.properties = bindProperties(this, propertyList)
+      this.actions = defineActions(this, actionList)
       addEventListeners(this, eventHandlerList)
     }
   }
-
   customElements.define(nameWithDash, el)
 }
 
@@ -49,6 +49,17 @@ function validatePropertyList(propertyList) {
     throw 'propertyList must be an array of {name, value, [sel], [attr]} objects'
   }
   return true
+}
+
+function defineActions(root, actionList) {
+  const actions = {}
+  if (!actionList) return actions
+  actionList.forEach(pair => {
+    if (pair.name && pair.action) {
+      actions[pair.name] = pair.action.bind(root)
+    }
+  })
+  return actions
 }
 
 function addEventListeners(root, eventHandlerList) {
