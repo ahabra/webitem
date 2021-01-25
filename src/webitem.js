@@ -11,12 +11,14 @@ import bind from '@ahabra/data-bind'
  * css: Optional. String. The CSS to apply on the element
  * propertyList: Optional. Array. Objects defining properties of the element. Each property
  * definition consists of {name, value, [sel], [attr]}
+ * actionList: Optional. Array. Objects defining actions. Each action definition consists of
+ * {name, action}, where action is a function definition.
  * eventHandlerList: Optional. Array. Objects defining event handlers of element. Each
  * handler definition consists of {sel, eventName, listener}
  * display: Optional. String. CSS display attribute. One of inline (default), inline-block, block.
  */
 export function defineElement({nameWithDash, html, css, display,
-  propertyList, eventHandlerList, actionList}) {
+  propertyList, actionList, eventHandlerList}) {
 
   const el = class extends HTMLElement {
     constructor() {

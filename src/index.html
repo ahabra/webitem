@@ -132,6 +132,9 @@
         ],
         actionList:[
           {name: 'updateColor', action: function(el) {
+            if (el !== this) {
+              console.warn(`Warning: 'this' should be equal to 'el'`)
+            }
             const index = Math.floor(Math.random() * colors.length)
             el.properties.color = `background-color:${colors[index]}`
           }}
