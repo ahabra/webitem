@@ -62,9 +62,9 @@ var webitem = (() => {
   }
 
   // src/utils/DomUtils.js
-  function select(selector, root) {
-    root = root || document;
-    return Array.from(root.querySelectorAll(":scope " + selector));
+  function select(selector, root2) {
+    root2 = root2 || document;
+    return Array.from(root2.querySelectorAll(":scope " + selector));
   }
   function htmlToNodes(html) {
     if (!html)
@@ -89,14 +89,14 @@ var webitem = (() => {
   }
 
   // node_modules/@ahabra/data-bind/dist/data-bind-module.js
-  function bind({obj, prop, sel, attr, root}) {
+  function bind({obj, prop, sel, attr, root: root2}) {
     validateArgs({prop, sel});
     obj = obj || {};
     const oldValue = obj.hasOwnProperty(prop) ? obj[prop] : void 0;
-    root = root || document;
+    root2 = root2 || document;
     const descriptor = {
-      get: () => getVal(root, sel, attr),
-      set: (v) => setVal(root, sel, v, attr),
+      get: () => getVal(root2, sel, attr),
+      set: (v) => setVal(root2, sel, v, attr),
       configurable: true,
       enumerable: true
     };
@@ -112,8 +112,8 @@ var webitem = (() => {
   var isSelect = (el) => el.tagName.toLowerCase() === "select";
   var isInput = (el) => "value" in el;
   var toSet = (v) => new Set(Array.isArray(v) ? v : [v]);
-  function getVal(root, sel, attr) {
-    const elements = findElements(root, sel);
+  function getVal(root2, sel, attr) {
+    const elements = findElements(root2, sel);
     if (elements.length === 0)
       return null;
     let el = elements[0];
@@ -133,8 +133,8 @@ var webitem = (() => {
     }
     return el.value;
   }
-  function setVal(root, sel, val, attr) {
-    const elements = findElements(root, sel);
+  function setVal(root2, sel, val, attr) {
+    const elements = findElements(root2, sel);
     if (elements.length === 0)
       return;
     const el = elements[0];
@@ -163,8 +163,8 @@ var webitem = (() => {
       el.innerHTML = val;
     }
   }
-  function findElements(root, sel) {
-    const elements = root.querySelectorAll(sel);
+  function findElements(root2, sel) {
+    const elements = root2.querySelectorAll(sel);
     if (elements.length === 0) {
       console.warn(`No elements found matching selector ${sel}`);
     }
@@ -186,6 +186,7 @@ var webitem = (() => {
     css,
     display,
     propertyList,
+    actionList,
     eventHandlerList
   }) {
     const el = class extends HTMLElement {
@@ -193,22 +194,24 @@ var webitem = (() => {
         super();
         addHtml(this, html, css, display);
         this.properties = bindProperties(this, propertyList);
+        this.actions = defineActions(this, actionList);
         addEventListeners(this, eventHandlerList);
       }
     };
     customElements.define(nameWithDash, el);
   }
-  function bindProperties(root, propertyList) {
+  function bindProperties(root2, propertyList) {
     const result = {};
     if (!validatePropertyList(propertyList))
       return result;
-    propertyList.forEach((p) => {
-      if (p.sel) {
-        bind({obj: result, prop: p.name, sel: p.sel, attr: p.attr, root: root.shadowRoot});
-      }
-      result[p.name] = p.value;
-    });
+    propertyList.forEach((p) => addProperty(result, p));
     return result;
+  }
+  function addProperty(result, p) {
+    if (p.sel) {
+      bind({obj: result, prop: p.name, sel: p.sel, attr: p.attr, root: root.shadowRoot});
+    }
+    result[p.name] = p.value;
   }
   function validatePropertyList(propertyList) {
     if (!propertyList)
@@ -218,29 +221,40 @@ var webitem = (() => {
     }
     return true;
   }
-  function addEventListeners(root, eventHandlerList) {
+  function defineActions(root2, actionList) {
+    const actions = {};
+    if (!actionList)
+      return actions;
+    actionList.forEach((pair) => {
+      if (pair.name && pair.action) {
+        actions[pair.name] = pair.action.bind(root2);
+      }
+    });
+    return actions;
+  }
+  function addEventListeners(root2, eventHandlerList) {
     if (!eventHandlerList)
       return;
     if (!Array.isArray(eventHandlerList)) {
       throw "eventHandlerList must be an array of {sel, eventName, listener} objects";
     }
     eventHandlerList.forEach((h) => {
-      const elements = select(h.sel, root.shadowRoot);
+      const elements = select(h.sel, root2.shadowRoot);
       elements.forEach((el) => {
         el.addEventListener(h.eventName, (ev) => {
-          h.listener(ev, root);
+          h.listener(ev, root2);
         });
       });
     });
   }
-  function addHtml(root, html, css, display) {
-    html = getHtml(root, html);
-    const shadow = root.attachShadow({mode: "open"});
+  function addHtml(root2, html, css, display) {
+    html = getHtml(root2, html);
+    const shadow = root2.attachShadow({mode: "open"});
     const nodes = htmlToNodes(getCss(css, display) + html);
     shadow.append(...nodes);
   }
-  function getHtml(root, html) {
-    return isFunction(html) ? html(root) : html;
+  function getHtml(root2, html) {
+    return isFunction(html) ? html(root2) : html;
   }
   function getCss(css, display) {
     return displayStyle(display) + buildCss(css);

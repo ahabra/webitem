@@ -36,13 +36,15 @@ function bindProperties(root, propertyList) {
   const result = {}
   if (!validatePropertyList(propertyList)) return result
 
-  propertyList.forEach(p => {
-    if (p.sel) {
-      bind({obj: result, prop: p.name, sel: p.sel, attr: p.attr, root: root.shadowRoot})
-    }
-    result[p.name] = p.value
-  })
+  propertyList.forEach(p => addProperty(result, p, root))
   return result
+}
+
+function addProperty(result, p, root) {
+  if (p.sel) {
+    bind({obj: result, prop: p.name, sel: p.sel, attr: p.attr, root: root.shadowRoot})
+  }
+  result[p.name] = p.value
 }
 
 function validatePropertyList(propertyList) {
