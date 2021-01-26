@@ -24,16 +24,16 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
-    "@web/test-runner": "^0.10.0",
-    "@web/test-runner-commands": "^0.2.1",
-    "@web/test-runner-puppeteer": "^0.7.3",
-    "chalk": "^2.4.1",
-    "esbuild": "^0.8.12",
-    "eslint": "^7.14.0",
-    "fs-extra": "^9.0.1",
+    "@web/test-runner": "^0.12.6",
+    "@web/test-runner-commands": "^0.4.0",
+    "@web/test-runner-puppeteer": "^0.9.1",
+    "chalk": "^4.1.0",
+    "esbuild": "^0.8.34",
+    "eslint": "^7.18.0",
+    "fs-extra": "^9.1.0",
     "serve": "^11.3.2"
   },
   "dependencies": {
-    "@ahabra/data-bind": "^0.5.0"
+    "@ahabra/data-bind": "^0.6.0"
   }
 }

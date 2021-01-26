@@ -62,9 +62,9 @@ var webitem = (() => {
   }
 
   // src/utils/DomUtils.js
-  function select(selector, root2) {
-    root2 = root2 || document;
-    return Array.from(root2.querySelectorAll(":scope " + selector));
+  function select(selector, root) {
+    root = root || document;
+    return Array.from(root.querySelectorAll(":scope " + selector));
   }
   function htmlToNodes(html) {
     if (!html)
@@ -89,14 +89,15 @@ var webitem = (() => {
   }
 
   // node_modules/@ahabra/data-bind/dist/data-bind-module.js
-  function bind({obj, prop, sel, attr, root: root2}) {
-    validateArgs({prop, sel});
+  function bind({obj, prop, sel, attr, root, onChange}) {
+    validateArgs(prop);
     obj = obj || {};
     const oldValue = obj.hasOwnProperty(prop) ? obj[prop] : void 0;
-    root2 = root2 || document;
+    root = root || document;
+    const objNotBound = {};
     const descriptor = {
-      get: () => getVal(root2, sel, attr),
-      set: (v) => setVal(root2, sel, v, attr),
+      get: () => getValue({prop, sel, attr, root, objNotBound}),
+      set: (value) => setValue({prop, value, root, sel, attr, objNotBound, onChange}),
       configurable: true,
       enumerable: true
     };
@@ -112,8 +113,29 @@ var webitem = (() => {
   var isSelect = (el) => el.tagName.toLowerCase() === "select";
   var isInput = (el) => "value" in el;
   var toSet = (v) => new Set(Array.isArray(v) ? v : [v]);
-  function getVal(root2, sel, attr) {
-    const elements = findElements(root2, sel);
+  function setValue({prop, value, root, sel, attr, objNotBound, onChange}) {
+    fireChange({prop, value, root, sel, attr, objNotBound, onChange});
+    if (sel) {
+      setDomVal(root, sel, value, attr);
+      return;
+    }
+    objNotBound[prop] = value;
+  }
+  function fireChange({prop, value, root, sel, attr, objNotBound, onChange}) {
+    if (!onChange)
+      return;
+    const oldValue = getValue({prop, root, sel, attr, objNotBound});
+    if (oldValue === value)
+      return;
+    onChange(oldValue, value);
+  }
+  function getValue({prop, root, sel, attr, objNotBound}) {
+    if (sel)
+      return getDomVal(root, sel, attr);
+    return objNotBound[prop];
+  }
+  function getDomVal(root, sel, attr) {
+    const elements = findElements(root, sel);
     if (elements.length === 0)
       return null;
     let el = elements[0];
@@ -133,8 +155,8 @@ var webitem = (() => {
     }
     return el.value;
   }
-  function setVal(root2, sel, val, attr) {
-    const elements = findElements(root2, sel);
+  function setDomVal(root, sel, val, attr) {
+    const elements = findElements(root, sel);
     if (elements.length === 0)
       return;
     const el = elements[0];
@@ -163,19 +185,16 @@ var webitem = (() => {
       el.innerHTML = val;
     }
   }
-  function findElements(root2, sel) {
-    const elements = root2.querySelectorAll(sel);
+  function findElements(root, sel) {
+    const elements = root.querySelectorAll(sel);
     if (elements.length === 0) {
       console.warn(`No elements found matching selector ${sel}`);
     }
     return [...elements];
   }
-  function validateArgs({prop, sel}) {
+  function validateArgs(prop) {
     if (typeof prop !== "string" || prop.length === 0) {
       throw `'prop' argument must be a String defining the name a property.`;
-    }
-    if (typeof sel !== "string" || sel.length === 0) {
-      throw `'sel' argument must be a String defining a selector.`;
     }
   }
 
@@ -200,14 +219,14 @@ var webitem = (() => {
     };
     customElements.define(nameWithDash, el);
   }
-  function bindProperties(root2, propertyList) {
+  function bindProperties(root, propertyList) {
     const result = {};
     if (!validatePropertyList(propertyList))
       return result;
-    propertyList.forEach((p) => addProperty(result, p));
+    propertyList.forEach((p) => addProperty(result, p, root));
     return result;
   }
-  function addProperty(result, p) {
+  function addProperty(result, p, root) {
     if (p.sel) {
       bind({obj: result, prop: p.name, sel: p.sel, attr: p.attr, root: root.shadowRoot});
     }
@@ -221,40 +240,40 @@ var webitem = (() => {
     }
     return true;
   }
-  function defineActions(root2, actionList) {
+  function defineActions(root, actionList) {
     const actions = {};
     if (!actionList)
       return actions;
     actionList.forEach((pair) => {
       if (pair.name && pair.action) {
-        actions[pair.name] = pair.action.bind(root2);
+        actions[pair.name] = pair.action.bind(root);
       }
     });
     return actions;
   }
-  function addEventListeners(root2, eventHandlerList) {
+  function addEventListeners(root, eventHandlerList) {
     if (!eventHandlerList)
       return;
     if (!Array.isArray(eventHandlerList)) {
       throw "eventHandlerList must be an array of {sel, eventName, listener} objects";
     }
     eventHandlerList.forEach((h) => {
-      const elements = select(h.sel, root2.shadowRoot);
+      const elements = select(h.sel, root.shadowRoot);
       elements.forEach((el) => {
         el.addEventListener(h.eventName, (ev) => {
-          h.listener(ev, root2);
+          h.listener(ev, root);
         });
       });
     });
   }
-  function addHtml(root2, html, css, display) {
-    html = getHtml(root2, html);
-    const shadow = root2.attachShadow({mode: "open"});
+  function addHtml(root, html, css, display) {
+    html = getHtml(root, html);
+    const shadow = root.attachShadow({mode: "open"});
     const nodes = htmlToNodes(getCss(css, display) + html);
     shadow.append(...nodes);
   }
-  function getHtml(root2, html) {
-    return isFunction(html) ? html(root2) : html;
+  function getHtml(root, html) {
+    return isFunction(html) ? html(root) : html;
   }
   function getCss(css, display) {
     return displayStyle(display) + buildCss(css);
