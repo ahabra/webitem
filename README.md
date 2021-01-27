@@ -69,11 +69,22 @@ This library consists of a single function `defineElement(object)`. It accepts a
     2. `value`: Initial value of the property.
     3. `sel`: Optional, String. A CSS selector that binds the property to a DOM element in the component.
     4. `attr`: Optional, String. An attribute on the DOM element to bind its value.
+    5. `onChange`: Optional. Function. A function to be called when the property's value change through an API call. The function can take three arguments `(webitem, oldValue, newValue)`
 5. `eventHandlerList`: Optional, Array of objects. Objects define event handlers of the component. Each event handler definition consists of `{sel, eventName, listener}`.
     1. `sel`: A CSS selector of an element in the component.
     2. `eventName`: Name of the event to bind to, e.g. `click`.
     3. `listener`: A function to be called when the event occures. The function accepts two arguments, an [event](https://developer.mozilla.org/en-US/docs/Web/API/Event) object, and `webitem` which is the web component.
-6. `display`: Optional, String. A CSS display attribute. A possible value can be  `inline` (default if missing), `inline-block`, `block`. This controls how the component will be displayed inside its container.
+6. `display`: Optional, String. A CSS display attribute. A possible value can be  `inline` (default if missing), `inline-block`, or `block`. This controls how the component is displayed inside its container.
+
+
+#### Note About Using Common CSS Files
+CSS applied to a web component (_through shadow DOM_) is scoped to the component, it does not interact with CSS outside the component.
+
+If you need to use a common CSS file within the component, a possible solution is to use the `<link>` tag in the component's html, for exmaple, add the next line at the top of your component's html:
+
+```html
+<link rel="stylesheet" href="css/common.css">
+```
 
 ## Examples
 There is a full set of examples in the repo's `src/` directory in both `index.html` and `test/webitem.test.js`. Next we will show some as well.
@@ -183,3 +194,92 @@ Here we define a property `counter` which is bound to the span with `id="counter
 
 We also define a listener for the `click` event on `button`. The listener takes two arguments, the [event](https://developer.mozilla.org/en-US/docs/Web/API/Event) object and the web component element.
 
+### Actions
+You can define actions (functions) that can execute with the web item context. Consider this example:
+
+```js
+webitem.defineElement({
+  nameWithDash: 'wi-t8',
+  html: `<h3>wi-t8 - Actions</h3>
+    <button>Click Me</button>`,
+  propertyList: [
+    {name: 'color', value: 'green', sel:'button', attr: 'style'}
+  ],
+  eventHandlerList: [
+    {
+      sel: 'button',
+      eventName: 'click',
+      listener: (ev, el) => el.actions.updateColor(el)
+    }
+  ],
+  actionList: [
+    {name: 'updateColor', action: function(el) {
+      if (el !== this) {
+        console.warn(`Warning: 'this' should be equal to 'el'`)
+      }
+      el.properties.color = `background-color:${getRandomColor()}`
+    }}
+  ]
+})
+```
+
+```html
+<wi-t8></wi-t8>
+```
+
+The `actionList` is an array which contains objects with two keys:
+1. `name`: The name of the action (function)
+2. `action`: The definition of the action/function. **Note:** If you declare the action as a _classic_ function (as opposed to an arrow '`=>`' function) then its `this` variable will point to the web item itself.
+
+You can access actions through the `actions` property, so for the above example, you can:
+
+```js
+$('wi-t8').actions.updateColor()
+```
+
+### Property's Change Callback
+When you define a property, you can provide a callback function to be called whenever the property's value is changed (throug an API call).
+The function expects two arguments, oldValue and newValue.
+Consider this example:
+
+```js
+webitem.defineElement({
+  nameWithDash: 'wi-t9',
+  html: `
+    <h3>wi-t9 - onChange</h3>
+    <button>Click Me</button>
+    oldValue: <span id="oldValue"></span>,
+    newValue: <span id="newValue"></span>
+  `,
+  propertyList: [
+    {name: 'color', value: 'green',
+      onChange: (el, oldValue, newValue) => {
+        el.shadowRoot.querySelector('button').style = `background-color:${newValue}`
+
+        function showColor(selector, color) {
+          const span = el.shadowRoot.querySelector(selector)
+          span.innerText = color
+          span.style = `background-color:${color}`
+        }
+        showColor('#oldValue', oldValue)
+        showColor('#newValue', newValue)
+      }}
+  ],
+  eventHandlerList: [
+    {
+      sel: 'button',
+      eventName: 'click',
+      listener: (ev, el) => {
+        // getRandomColor() returns names of random colors
+        el.properties.color = getRandomColor()
+      }
+    }
+  ]
+})
+```
+
+```html
+<wi-t9></wi-t9>
+```
+
+In the above example, we change the `color` property in the click listener, which will invoke the `onChange` callbak on the propeerty.

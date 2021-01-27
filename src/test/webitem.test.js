@@ -130,6 +130,33 @@ describe('webitem', () => {
 
     })
 
+    describe('property onChange', ()=> {
+      const nameWithDash = 'wi-t9'
+      const html = `
+        <div>
+          <h3>wi-t9 - onChange</h3>
+        </div>
+      `
+      const record = {}
+      const propertyList = [ {name: 'color', value: 'green',
+        onChange: (el, oldValue, newValue) => {
+          record.el = el
+          record.oldValue = oldValue
+          record.newValue = newValue
+        }
+      }]
+      webitem.defineElement({nameWithDash, html, propertyList})
+      const el = createAndAddElement(nameWithDash)
+
+      it('runs onChange when a property value is changed', () => {
+        el.properties.color = 'red'
+
+        expect(record.el).to.equal(el)
+        expect(record.oldValue).to.equal('green')
+        expect(record.newValue).to.equal('red')
+      })
+    })
+
   })  // defineElement
 
 }) // webitem

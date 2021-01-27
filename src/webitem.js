@@ -40,11 +40,15 @@ function bindProperties(root, propertyList) {
   return result
 }
 
-function addProperty(result, prop, root) {
-  const onChange = prop.onChange ? (oldValue, newValue) => prop.onChange(root, oldValue, newValue) : undefined
-  bind({obj: result, prop: prop.name,
-    sel: prop.sel, attr: prop.attr, root: root.shadowRoot, onChange })
-  result[prop.name] = prop.value
+function addProperty(obj, prop, root) {
+  const onChange = createOnChange(prop, root)
+  bind({obj, prop: prop.name, sel: prop.sel, attr: prop.attr, root: root.shadowRoot, onChange })
+  obj[prop.name] = prop.value
+}
+
+function createOnChange(prop, root) {
+  if (!prop.onChange) return undefined
+  return (oldValue, newValue) => prop.onChange(root, oldValue, newValue)
 }
 
 function validatePropertyList(propertyList) {

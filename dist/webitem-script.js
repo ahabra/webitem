@@ -226,11 +226,15 @@ var webitem = (() => {
     propertyList.forEach((p) => addProperty(result, p, root));
     return result;
   }
-  function addProperty(result, p, root) {
-    if (p.sel) {
-      bind({obj: result, prop: p.name, sel: p.sel, attr: p.attr, root: root.shadowRoot});
-    }
-    result[p.name] = p.value;
+  function addProperty(obj, prop, root) {
+    const onChange = createOnChange(prop, root);
+    bind({obj, prop: prop.name, sel: prop.sel, attr: prop.attr, root: root.shadowRoot, onChange});
+    obj[prop.name] = prop.value;
+  }
+  function createOnChange(prop, root) {
+    if (!prop.onChange)
+      return void 0;
+    return (oldValue, newValue) => prop.onChange(root, oldValue, newValue);
   }
   function validatePropertyList(propertyList) {
     if (!propertyList)
