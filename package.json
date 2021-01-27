@@ -1,6 +1,6 @@
 {
   "name": "@ahabra/webitem",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Library to simplify crerating Web Components/Custom Elements",
   "author": "Abdul Habra",
   "license": "Apache",
