@@ -10,7 +10,7 @@ import bind from '@ahabra/data-bind'
  * html: Optional. String or Function. The HTML content of the element
  * css: Optional. String. The CSS to apply on the element
  * propertyList: Optional. Array. Objects defining properties of the element. Each property
- * definition consists of {name, value, [sel], [attr]}
+ * definition consists of {name, value, [sel], [attr], [onChange]}
  * actionList: Optional. Array. Objects defining actions. Each action definition consists of
  * {name, action}, where action is a function definition.
  * eventHandlerList: Optional. Array. Objects defining event handlers of element. Each
@@ -40,11 +40,11 @@ function bindProperties(root, propertyList) {
   return result
 }
 
-function addProperty(result, p, root) {
-  if (p.sel) {
-    bind({obj: result, prop: p.name, sel: p.sel, attr: p.attr, root: root.shadowRoot})
-  }
-  result[p.name] = p.value
+function addProperty(result, prop, root) {
+  const onChange = prop.onChange ? (oldValue, newValue) => prop.onChange(root, oldValue, newValue) : undefined
+  bind({obj: result, prop: prop.name,
+    sel: prop.sel, attr: prop.attr, root: root.shadowRoot, onChange })
+  result[prop.name] = prop.value
 }
 
 function validatePropertyList(propertyList) {

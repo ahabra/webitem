@@ -1,6 +1,12 @@
 <html>
   <head>
     <title>WebItem Visual Test</title>
+    <style>
+      code {
+        font-weight: bold;
+        font-family: 'Courier New', Courier, monospace;
+      }
+    </style>
   </head>
 
   <body>
@@ -13,6 +19,7 @@
     <wi-t7></wi-t7>
     <wi-t7></wi-t7>
     <wi-t8></wi-t8>
+    <wi-t9></wi-t9>
 
 
     <!-- JS code will be added to script element with 'data-app' attribute -->
@@ -21,8 +28,15 @@
     <script>
       const color1 = '#f8f8e6'
       const color2 = '#dcdcc6'
-      const colors = ['Aqua', 'Beige', 'Blue', 'Cyan', 'Gold', 'Gray', 'Green', 'Orange', 'Red', 'Yellow']
+      const colors = ['Magenta', 'Beige', 'Blue', 'Cyan', 'Gold', 'Gray', 'Green', 'Orange', 'Red', 'Yellow']
+      const getRandomColor = () => colors[ Math.floor(Math.random() * colors.length) ]
 
+      const commonCss = `
+      code {
+        font-weight: bold;
+        font-family: 'Courier New', Courier, monospace;
+      }
+      `
 
       webitem.defineElement({
         nameWithDash: 'wi-t1',
@@ -62,11 +76,12 @@
         html: `
         <div style="background-color:${color2}">
           <h3>wi-t5 - Bound Properties</h3>
-          In the browser's console, inspect <b><code>$('wi-t5').properties</code></b>
+          In the browser's console, inspect <code>$('wi-t5').properties</code>
           <p>Country: <input id="country" type="text"></p>
           <p>Capital: <input id="capital" type="text"></p>
         </div>
         `,
+        css: commonCss,
         propertyList: [
           {name: 'country', value:'Syria', sel: '#country'},
           {name: 'capital', value:'Damascuss', sel:'#capital'},
@@ -135,13 +150,49 @@
             if (el !== this) {
               console.warn(`Warning: 'this' should be equal to 'el'`)
             }
-            const index = Math.floor(Math.random() * colors.length)
-            el.properties.color = `background-color:${colors[index]}`
+            el.properties.color = `background-color:${getRandomColor()}`
           }}
         ]
-
       })
 
+      webitem.defineElement({
+        nameWithDash: 'wi-t9',
+        html: `
+        <div style="background-color:${color2}">
+          <h3>wi-t9 - onChange</h3>
+          <p>In the browser's console, try: <code>$('wi-t9').properties.color = 'green'</code></p>
+          <button>Click Me</button>
+          oldValue: <span id="oldValue"></span>,
+          newValue: <span id="newValue"></span>
+        </div>
+        `,
+        css: commonCss,
+        propertyList: [
+          {name: 'color', value: 'green',
+            onChange: (el, oldValue, newValue) => {
+              el.shadowRoot.querySelector('button').style = `background-color:${newValue}`
+
+              function showColor(selector, color) {
+                const span = el.shadowRoot.querySelector(selector)
+                span.innerText = color
+                span.style = `background-color:${color}`
+              }
+              showColor('#oldValue', oldValue)
+              showColor('#newValue', newValue)
+            }}
+        ],
+        eventHandlerList: [
+          {
+            sel: 'button',
+            eventName: 'click',
+            listener: (ev, el) => {
+              el.properties.color = getRandomColor()
+            }
+          }
+        ]
+
+
+      })
     </script>
   </body>
 </html>
