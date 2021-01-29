@@ -88,7 +88,7 @@ var webitem = (() => {
     return `<${name}${sep}${atts}>${content}</${name}>`;
   }
 
-  // node_modules/@ahabra/data-bind/dist/data-bind-module.js
+  // node_modules/@techexp/data-bind/dist/data-bind-module.js
   function bind({obj, prop, sel, attr, root, onChange}) {
     validateArgs(prop);
     obj = obj || {};

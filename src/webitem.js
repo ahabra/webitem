@@ -1,7 +1,7 @@
 import * as ObjectUtils from './utils/ObjectUtils.js'
 import * as StringUtils from './utils/StringUtils.js'
 import * as DomUtils from './utils/DomUtils.js'
-import bind from '@ahabra/data-bind'
+import bind from '@techexp/data-bind'
 
 /**
  * Define a custom element

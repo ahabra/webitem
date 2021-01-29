@@ -1,5 +1,5 @@
 {
-  "name": "@ahabra/webitem",
+  "name": "@techexp/webitem",
   "version": "0.1.0",
   "description": "Library to simplify crerating Web Components/Custom Elements",
   "author": "Abdul Habra",
@@ -13,6 +13,9 @@
   "engines": {
     "node": ">=15.0.0",
     "npm": ">=7.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "clean": "node scripts/clean.js",
@@ -34,6 +37,6 @@
     "serve": "^11.3.2"
   },
   "dependencies": {
-    "@ahabra/data-bind": "^0.6.0"
+    "@techexp/data-bind": "^0.6.2"
   }
 }
