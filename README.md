@@ -13,7 +13,7 @@ You can use this library as either an EcmaScript module, or the old way as a scr
 If you plan to use this package as an NPM module:
 
 ```bash
-    npm install @ahabra/webitem
+    npm install @techexp/webitem
 ```
 
 ### Install as a Script
@@ -28,7 +28,7 @@ Alternatively, you can download the file `https://raw.githubusercontent.com/ahab
 ## Usage
 If you installed as an EcmaScript module
 ```js
-import * as webitem from '@ahabra/webitem'
+import * as webitem from '@techexp/webitem'
 ```
 
 If you installed as a Script, the library is available at `window.webitem`
@@ -37,7 +37,7 @@ If you installed as a Script, the library is available at `window.webitem`
 This example shows how to create a bare-bone web item, it creates a Web Component named `bare-bone` which you can use in the html code.
 
 ```js
-import * as webitem from '@ahabra/webitem'
+import * as webitem from '@techexp/webitem'
 // or use window.webitem if you are using the script.
 
 webitem.defineElement({
@@ -161,7 +161,7 @@ The binding is _bi-directional_, changing the property's value will change the v
 
 Binding properties to DOM elements is optional, you can choose to define a proiperty without `sel` value.
 
-For more details about bound properties, check [Data Bind](https://www.npmjs.com/package/@ahabra/data-bind) NPM package which is used by this library.
+For more details about bound properties, check [Data Bind](https://www.npmjs.com/package/@techexp/data-bind) NPM package which is used by this library.
 
 
 ### Event Handler
