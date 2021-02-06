@@ -208,6 +208,8 @@ var webitem = (() => {
     actionList,
     eventHandlerList
   }) {
+    if (customElements.get(nameWithDash))
+      return false;
     const el = class extends HTMLElement {
       constructor() {
         super();
@@ -218,6 +220,7 @@ var webitem = (() => {
       }
     };
     customElements.define(nameWithDash, el);
+    return true;
   }
   function bindProperties(root, propertyList) {
     const result = {};
