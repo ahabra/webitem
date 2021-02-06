@@ -76,7 +76,7 @@ This library consists of a single function `defineElement(object)`. It accepts a
     3. `listener`: A function to be called when the event occures. The function accepts two arguments, an [event](https://developer.mozilla.org/en-US/docs/Web/API/Event) object, and `webitem` which is the web component.
 6. `display`: Optional, String. A CSS display attribute. A possible value can be  `inline` (default if missing), `inline-block`, or `block`. This controls how the component is displayed inside its container.
 
-The `defineElement()` returns true if the element was created, false if the element already exists, in which case it will not be re-created.
+The `defineElement()` function returns true if the element was created, false if the element already exists, in which case it will not be re-created.
 
 #### Note About Using Common CSS Files
 CSS applied to a web component (_through shadow DOM_) is scoped to the component, it does not interact with CSS outside the component.
