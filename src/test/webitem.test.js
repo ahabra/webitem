@@ -157,6 +157,17 @@ describe('webitem', () => {
       })
     })
 
+    describe('attempt to recreate item', ()=> {
+      it('recreation returns false', ()=> {
+        const nameWithDash = 'wi-t10'
+        const html = '<h3>wi-t10 - recreate</h3>'
+        let result = webitem.defineElement({nameWithDash, html})
+        expect(result).to.be.true
+        result = webitem.defineElement({nameWithDash, html})
+        expect(result).to.be.false
+      })
+    })
+
   })  // defineElement
 
 }) // webitem

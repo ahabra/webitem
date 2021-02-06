@@ -16,9 +16,13 @@ import bind from '@techexp/data-bind'
  * eventHandlerList: Optional. Array. Objects defining event handlers of element. Each
  * handler definition consists of {sel, eventName, listener}
  * display: Optional. String. CSS display attribute. One of inline (default), inline-block, block.
+ * @returns true if the element was created, false if the element already exists, in which case
+ * it will not be re-created.
  */
 export function defineElement({nameWithDash, html, css, display,
   propertyList, actionList, eventHandlerList}) {
+
+  if (customElements.get(nameWithDash)) return false
 
   const el = class extends HTMLElement {
     constructor() {
@@ -30,6 +34,7 @@ export function defineElement({nameWithDash, html, css, display,
     }
   }
   customElements.define(nameWithDash, el)
+  return true
 }
 
 function bindProperties(root, propertyList) {
