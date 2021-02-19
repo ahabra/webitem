@@ -49,7 +49,7 @@ function isEmpty(s) {
 // src/utils/DomUtils.js
 function select(selector, root) {
   root = root || document;
-  return Array.from(root.querySelectorAll(":scope " + selector));
+  return Array.from(root.querySelectorAll(selector));
 }
 function htmlToNodes(html) {
   if (!html)
