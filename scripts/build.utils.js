@@ -9,7 +9,7 @@ const out = `${target}/out`
 const dist = 'dist'
 const banner = `// webitem.js Library to simplify creating HTML5 Custom Elements
 // https://github.com/ahabra/webitem
-// Copyright 2021 (C) Abdul Habra
+// Copyright 2021 (C) Abdul Habra. Version ${process.env.npm_package_version}.
 // Apache License Version 2.0
 
 `

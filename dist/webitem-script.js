@@ -1,6 +1,6 @@
 // webitem.js Library to simplify creating HTML5 Custom Elements
 // https://github.com/ahabra/webitem
-// Copyright 2021 (C) Abdul Habra
+// Copyright 2021 (C) Abdul Habra. Version 0.2.3.
 // Apache License Version 2.0
 
 

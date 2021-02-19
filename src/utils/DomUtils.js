@@ -8,7 +8,9 @@ export function elById(id) {
 export function select(selector, root) {
   root = root || document
   // Adding :scope makes selector applies to root's children only
-  return Array.from(root.querySelectorAll(':scope ' + selector))
+  // However, if the root is a web component, :scope does not work on
+  // Safari or Firefox, but does work on Chrome. 2021-02-18
+  return Array.from(root.querySelectorAll(selector))
 }
 
 /** Get or set an attribute's value */
