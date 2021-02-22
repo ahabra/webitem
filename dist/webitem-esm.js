@@ -1,79 +1,11 @@
 // webitem.js Library to simplify creating HTML5 Custom Elements
 // https://github.com/ahabra/webitem
-// Copyright 2021 (C) Abdul Habra. Version 0.2.3.
+// Copyright 2021 (C) Abdul Habra. Version 0.3.1.
 // Apache License Version 2.0
 
 
-// src/utils/ObjectUtils.js
-function isString(s) {
-  return isType(s, "String");
-}
-function isFunction(f) {
-  return isType(f, "Function");
-}
-function isType(v, type) {
-  return Object.prototype.toString.call(v) === `[object ${type}]`;
-}
-function forEachEntry(object, func) {
-  if (!object || !func)
-    return;
-  if (Array.isArray(object)) {
-    object.forEach((v, index) => {
-      func(index, v);
-    });
-    return;
-  }
-  Object.entries(object).forEach((p) => func(p[0], p[1]));
-}
-
-// src/utils/StringUtils.js
-function startsWith(st, search, isCaseSensitive) {
-  if (isCaseSensitive) {
-    return st.startsWith(search);
-  }
-  const start = st.substring(0, search.length).toLowerCase();
-  return search.toLowerCase() === start;
-}
-function trim(s) {
-  if (isEmpty(s))
-    return "";
-  if (!isString(s)) {
-    s = String(s);
-  }
-  return s.trim(s);
-}
-function isEmpty(s) {
-  return s === void 0 || s === null || s === "";
-}
-
-// src/utils/DomUtils.js
-function select(selector, root) {
-  root = root || document;
-  return Array.from(root.querySelectorAll(selector));
-}
-function htmlToNodes(html) {
-  if (!html)
-    return [];
-  html = html.trim();
-  if (html.length === 0)
-    return [];
-  const template = document.createElement("template");
-  template.innerHTML = html;
-  return Array.prototype.slice.call(template.content.childNodes);
-}
-function tag({name, attributes, content}) {
-  if (!name)
-    return null;
-  const attArray = [];
-  forEachEntry(attributes, (k, v) => {
-    attArray.push(`${k}="${v}"`);
-  });
-  const sep = attArray.length > 0 ? " " : "";
-  const atts = attArray.join(" ");
-  return `<${name}${sep}${atts}>${content}</${name}>`;
-}
-
 // src/webitem.js
+import {Domer, Objecter, Stringer} from "@techexp/jshelper";
 import bind from "@techexp/data-bind";
 function defineElement({
   nameWithDash,
@@ -141,7 +73,7 @@ function addEventListeners(root, eventHandlerList) {
     throw "eventHandlerList must be an array of {sel, eventName, listener} objects";
   }
   eventHandlerList.forEach((h) => {
-    const elements = select(h.sel, root.shadowRoot);
+    const elements = Domer.all(h.sel, root.shadowRoot);
     elements.forEach((el) => {
       el.addEventListener(h.eventName, (ev) => {
         h.listener(ev, root);
@@ -152,26 +84,26 @@ function addEventListeners(root, eventHandlerList) {
 function addHtml(root, html, css, display) {
   html = getHtml(root, html);
   const shadow = root.attachShadow({mode: "open"});
-  const nodes = htmlToNodes(getCss(css, display) + html);
+  const nodes = Domer.createElements(getCss(css, display) + html);
   shadow.append(...nodes);
 }
 function getHtml(root, html) {
-  return isFunction(html) ? html(root) : html;
+  return Objecter.isFunction(html) ? html(root) : html;
 }
 function getCss(css, display) {
   return displayStyle(display) + buildCss(css);
 }
 function buildCss(css) {
-  css = trim(css);
+  css = Stringer.trim(css);
   if (css.length === 0)
     return "";
-  if (!startsWith(css, "<style>", false)) {
-    css = tag({name: "style", content: css});
+  if (!Stringer.startsWith(css, "<style>", false)) {
+    css = Domer.tag("style", {}, css);
   }
   return css;
 }
 function displayStyle(display) {
-  display = trim(display);
+  display = Stringer.trim(display);
   if (display.length === 0)
     return "";
   return `
