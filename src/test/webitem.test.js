@@ -1,6 +1,6 @@
 import {expect} from '@esm-bundle/chai'
 import * as webitem from '../webitem'
-import * as DomUtils from '../utils/DomUtils'
+import {Domer} from '@techexp/jshelper'
 
 
 describe('webitem', () => {
@@ -74,7 +74,7 @@ describe('webitem', () => {
       webitem.defineElement({nameWithDash, html, propertyList})
       createAndAddElement(nameWithDash)
       const found = findElementByName(nameWithDash)
-      const country = DomUtils.select('#country', found.shadowRoot)[0]
+      const country = Domer.first('#country', found.shadowRoot)
 
       it('populates properties values', () => {
         expect(found.properties.country).to.equal('Syria')
@@ -84,7 +84,7 @@ describe('webitem', () => {
 
       it('populates DOM elements from properties', () => {
         expect(country.value).to.equal('Syria')
-        const h3 = DomUtils.select('h3', found.shadowRoot)[0]
+        const h3 = Domer.first('h3', found.shadowRoot)
         expect(h3.style.color).to.equal('green')
       })
 
@@ -122,7 +122,7 @@ describe('webitem', () => {
       it('listens to events', () => {
         const found = findElementByName(nameWithDash)
         expect(found.properties.counter).to.equal('0')
-        const button = DomUtils.select('button', found.shadowRoot)[0]
+        const button = Domer.first('button', found.shadowRoot)
         button.click()
         button.click()
         expect(found.properties.counter).to.equal('2')
@@ -179,7 +179,7 @@ function findElementByName(name) {
 }
 
 function createAndAddElement(name, content) {
-  const el = DomUtils.createElement({name, content})
+  const el = Domer.createElement(name, {}, content)
 
   document.body.appendChild(el)
   return el

@@ -1,6 +1,4 @@
-import * as ObjectUtils from './utils/ObjectUtils.js'
-import * as StringUtils from './utils/StringUtils.js'
-import * as DomUtils from './utils/DomUtils.js'
+import {Domer, Objecter, Stringer} from '@techexp/jshelper'
 import bind from '@techexp/data-bind'
 
 /**
@@ -82,7 +80,7 @@ function addEventListeners(root, eventHandlerList) {
   }
 
   eventHandlerList.forEach(h => {
-    const elements = DomUtils.select(h.sel, root.shadowRoot)
+    const elements = Domer.all(h.sel, root.shadowRoot)
     elements.forEach(el => {
       el.addEventListener(h.eventName, ev => {
         h.listener(ev, root)
@@ -95,12 +93,12 @@ function addHtml(root, html, css, display) {
   html = getHtml(root, html)
 
   const shadow = root.attachShadow({mode: 'open'})
-  const nodes = DomUtils.htmlToNodes(getCss(css, display) + html)
+  const nodes = Domer.createElements(getCss(css, display) + html)
   shadow.append(...nodes)
 }
 
 function getHtml(root, html) {
-  return ObjectUtils.isFunction(html) ? html(root) : html
+  return Objecter.isFunction(html) ? html(root) : html
 }
 
 function getCss(css, display) {
@@ -108,17 +106,17 @@ function getCss(css, display) {
 }
 
 function buildCss(css) {
-  css = StringUtils.trim(css)
+  css = Stringer.trim(css)
   if (css.length === 0) return ''
 
-  if (!StringUtils.startsWith(css, '<style>', false)) {
-    css = DomUtils.tag({name: 'style', content: css})
+  if (!Stringer.startsWith(css, '<style>', false)) {
+    css = Domer.tag('style', {}, css)
   }
   return css
 }
 
 function displayStyle(display) {
-  display = StringUtils.trim(display)
+  display = Stringer.trim(display)
   if (display.length === 0) return ''
   return `
   <style>
