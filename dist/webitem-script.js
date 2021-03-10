@@ -225,6 +225,8 @@ var webitem = (() => {
     });
   }
   function classPresentIf(el, cssClass, condition) {
+    if (!el)
+      return;
     const func = condition ? "add" : "remove";
     el.classList[func](cssClass);
   }
@@ -398,6 +400,8 @@ var webitem = (() => {
     }
     if (isRadio(el)) {
       el = elements.filter(isRadio).find((e) => e.checked);
+      if (!el)
+        return void 0;
     }
     return el.value;
   }

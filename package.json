@@ -37,7 +37,7 @@
     "serve": "^11.3.2"
   },
   "dependencies": {
-    "@techexp/data-bind": "^0.6.3",
-    "@techexp/jshelper": "^0.1.1"
+    "@techexp/data-bind": "^0.6.4",
+    "@techexp/jshelper": "^0.1.3"
   }
 }
