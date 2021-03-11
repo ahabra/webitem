@@ -317,3 +317,8 @@ webitem.defineElement({
 
 In the above example, we change the `color` property in the click listener, which will invoke the `onChange`
 callback on the property.
+
+## TODO
+This is my wishlist for this library:
+
+1. 2021-03-10: Allow easy API for attribute change callbacks
