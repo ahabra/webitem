@@ -1,14 +1,12 @@
 // webitem.js Library to simplify creating HTML5 Custom Elements
 // https://github.com/ahabra/webitem
-// Copyright 2021 (C) Abdul Habra. Version 0.3.3.
+// Copyright 2021 (C) Abdul Habra. Version 0.3.4.
 // Apache License Version 2.0
 
 
 var webitem = (() => {
   var __defProp = Object.defineProperty;
-  var __markAsModule = (target) => __defProp(target, "__esModule", {value: true});
   var __export = (target, all2) => {
-    __markAsModule(target);
     for (var name in all2)
       __defProp(target, name, {get: all2[name], enumerable: true});
   };
@@ -46,7 +44,9 @@ var webitem = (() => {
     has: () => has,
     isDate: () => isDate,
     isFunction: () => isFunction,
+    isInteger: () => isInteger,
     isNil: () => isNil,
+    isNumber: () => isNumber,
     isString: () => isString
   });
   function isNil(x) {
@@ -60,6 +60,24 @@ var webitem = (() => {
   }
   function isDate(d) {
     return isType(d, "Date");
+  }
+  function isNumber(n) {
+    if (isType(n, "Number")) {
+      if (Number.isNaN(n))
+        return false;
+      return Number.isFinite(n);
+    }
+    if (!isString(n))
+      return false;
+    n = n.trim();
+    if (n === "")
+      return false;
+    return !isNaN(n);
+  }
+  function isInteger(n) {
+    if (!isNumber(n))
+      return false;
+    return Number.isInteger(Number.parseFloat(n));
   }
   function isType(v, type) {
     return Object.prototype.toString.call(v) === `[object ${type}]`;
@@ -335,6 +353,47 @@ var webitem = (() => {
     });
     return text;
   }
+  var LineCompare_exports = {};
+  __export2(LineCompare_exports, {
+    compareLines: () => compareLines
+  });
+  function compareLines(t1, t2, {trim: trim2 = true, skipEmpty = true, caseSensitive = true} = {trim: true, skipEmpty: true, caseSensitive: true}) {
+    t1 = toLines(t1, {trim: trim2, skipEmpty});
+    t2 = toLines(t2, {trim: trim2, skipEmpty});
+    if (t1.length !== t2.length) {
+      return `t1 has ${t1.length} lines(s) while t2 has ${t2.length} line(s).`;
+    }
+    for (let i = 0; i < t1.length; i++) {
+      const result = compareTwoLines(t1[i], t2[i], i, caseSensitive);
+      if (result.length > 0) {
+        return result;
+      }
+    }
+    return "";
+  }
+  function compareTwoLines(t1, t2, index, caseSensitive) {
+    const a = caseSensitive ? t1 : t1.toLowerCase();
+    const b = caseSensitive ? t2 : t2.toLowerCase();
+    if (a !== b) {
+      return `Line #${index + 1} mismatch.
+${t1}
+${t2}`;
+    }
+    return "";
+  }
+  function toLines(t, {trim: trim2, skipEmpty}) {
+    if (trim2) {
+      t = trim(t);
+    }
+    t = t.split("\n");
+    if (trim2) {
+      t = t.map((ln) => trim(ln));
+    }
+    if (skipEmpty) {
+      t = t.filter((ln) => !!ln);
+    }
+    return t;
+  }
 
   // node_modules/@techexp/data-bind/dist/data-bind-module.js
   function bind({obj, prop, sel, attr, root, onChange}) {
@@ -482,7 +541,9 @@ var webitem = (() => {
   function addProperty(obj, prop, root) {
     const onChange = createOnChange(prop, root);
     bind({obj, prop: prop.name, sel: prop.sel, attr: prop.attr, root: root.shadowRoot, onChange});
-    obj[prop.name] = prop.value;
+    if (prop.value !== void 0) {
+      obj[prop.name] = prop.value;
+    }
   }
   function createOnChange(prop, root) {
     if (!prop.onChange)

@@ -1,6 +1,6 @@
 // webitem.js Library to simplify creating HTML5 Custom Elements
 // https://github.com/ahabra/webitem
-// Copyright 2021 (C) Abdul Habra. Version 0.3.3.
+// Copyright 2021 (C) Abdul Habra. Version 0.3.4.
 // Apache License Version 2.0
 
 
@@ -40,7 +40,9 @@ function bindProperties(root, propertyList) {
 function addProperty(obj, prop, root) {
   const onChange = createOnChange(prop, root);
   bind({obj, prop: prop.name, sel: prop.sel, attr: prop.attr, root: root.shadowRoot, onChange});
-  obj[prop.name] = prop.value;
+  if (prop.value !== void 0) {
+    obj[prop.name] = prop.value;
+  }
 }
 function createOnChange(prop, root) {
   if (!prop.onChange)
