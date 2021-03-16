@@ -46,7 +46,9 @@ function bindProperties(root, propertyList) {
 function addProperty(obj, prop, root) {
   const onChange = createOnChange(prop, root)
   bind({obj, prop: prop.name, sel: prop.sel, attr: prop.attr, root: root.shadowRoot, onChange })
-  obj[prop.name] = prop.value
+  if (prop.value !== undefined) {
+    obj[prop.name] = prop.value
+  }
 }
 
 function createOnChange(prop, root) {
