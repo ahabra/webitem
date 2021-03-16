@@ -7,12 +7,15 @@ const Print = require('./console.utils').Print
 const target = 'target'
 const out = `${target}/out`
 const dist = 'dist'
-const banner = `// webitem.js Library to simplify creating HTML5 Custom Elements
+const banner = {
+  js: `// webitem.js Library to simplify creating HTML5 Custom Elements
 // https://github.com/ahabra/webitem
 // Copyright 2021 (C) Abdul Habra. Version ${process.env.npm_package_version}.
 // Apache License Version 2.0
 
 `
+}
+
 
 function clean() {
   fs.rmSync(target, { recursive: true, force: true})
