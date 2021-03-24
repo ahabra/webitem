@@ -38,6 +38,6 @@
   },
   "dependencies": {
     "@techexp/data-bind": "^0.6.5",
-    "@techexp/jshelper": "^0.3.1"
+    "@techexp/jshelper": "^0.4.0"
   }
 }
