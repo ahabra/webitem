@@ -50,11 +50,11 @@ describe('webitem', () => {
       createAndAddElement(nameWithDash)
 
       const found = findElementByName(nameWithDash)
-      expect(found.properties.p1).to.equal('v1')
-      expect(found.properties.p2).to.equal('v2')
+      expect(found.wi.properties.p1).to.equal('v1')
+      expect(found.wi.properties.p2).to.equal('v2')
 
-      found.properties.p1 = 10
-      expect(found.properties.p1).to.equal(10)
+      found.wi.properties.p1 = 10
+      expect(found.wi.properties.p1).to.equal(10)
     })
 
     describe('bounded properties', () => {
@@ -77,9 +77,9 @@ describe('webitem', () => {
       const country = Domer.first('#country', found.shadowRoot)
 
       it('populates properties values', () => {
-        expect(found.properties.country).to.equal('Syria')
-        expect(found.properties.capital).to.equal('Damascus')
-        expect(found.properties.style).to.equal('color:green')
+        expect(found.wi.properties.country).to.equal('Syria')
+        expect(found.wi.properties.capital).to.equal('Damascus')
+        expect(found.wi.properties.style).to.equal('color:green')
       })
 
       it('populates DOM elements from properties', () => {
@@ -89,11 +89,11 @@ describe('webitem', () => {
       })
 
       it('supports 2-way binding', () => {
-        found.properties.country = 'Japan'
+        found.wi.properties.country = 'Japan'
         expect(country.value).to.equal('Japan')
 
         country.value = 'USA'
-        expect(found.properties.country).to.equal('USA')
+        expect(found.wi.properties.country).to.equal('USA')
       })
 
     })
@@ -110,8 +110,8 @@ describe('webitem', () => {
       const propertyList = [ {name: 'counter', value: '0', sel: '#counter'} ]
 
       function listener(ev, el) {
-        const counter = parseInt(el.properties.counter, 10)
-        el.properties.counter = counter + 1
+        const counter = parseInt(el.wi.properties.counter, 10)
+        el.wi.properties.counter = counter + 1
       }
 
       const eventHandlerList = [ {sel: 'button', eventName: 'click', listener} ]
@@ -121,11 +121,11 @@ describe('webitem', () => {
 
       it('listens to events', () => {
         const found = findElementByName(nameWithDash)
-        expect(found.properties.counter).to.equal('0')
+        expect(found.wi.properties.counter).to.equal('0')
         const button = Domer.first('button', found.shadowRoot)
         button.click()
         button.click()
-        expect(found.properties.counter).to.equal('2')
+        expect(found.wi.properties.counter).to.equal('2')
       })
 
     })
@@ -149,7 +149,7 @@ describe('webitem', () => {
       const el = createAndAddElement(nameWithDash)
 
       it('runs onChange when a property value is changed', () => {
-        el.properties.color = 'red'
+        el.wi.properties.color = 'red'
 
         expect(record.el).to.equal(el)
         expect(record.oldValue).to.equal('green')

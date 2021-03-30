@@ -152,7 +152,7 @@ webitem.defineElement({
   nameWithDash: 'wi-t5',
   html: `
     <h3>wi-t5 - Bound Properties</h3>
-    In the browser's console, inspect $('wi-t5').properties
+    In the browser's console, inspect $('wi-t5').wi.properties
     <p>Country: <input id="country" type="text"></p>
     <p>Capital: <input id="capital" type="text"></p>
   `,
@@ -179,11 +179,11 @@ The `propertyList` array defines three properties that are bound to three elemen
 
 To use these properties:
 ```js
-$('#bounded').properties.country = 'USA'
-$('#bounded').properties.capital = 'DC'
-$('#bounded').properties.style = 'color.blue'
+$('#bounded').wi.properties.country = 'USA'
+$('#bounded').wi.properties.capital = 'DC'
+$('#bounded').wi.properties.style = 'color.blue'
 
-console.log($('#bounded').properties.country) // prints USA
+console.log($('#bounded').wi.properties.country) // prints USA
 ```
 
 The binding is _bi-directional_, changing the property's value will change the view, and changing the
@@ -213,8 +213,8 @@ webitem.defineElement({
       sel: 'button',
       eventName: 'click',
       listener: (ev, el) => {
-        const counter = parseInt(el.properties.counter, 10)
-        el.properties.counter = counter + 1
+        const counter = parseInt(el.wi.properties.counter, 10)
+        el.wi.properties.counter = counter + 1
       }
     }
   ]
@@ -241,7 +241,7 @@ webitem.defineElement({
     {
       sel: 'button',
       eventName: 'click',
-      listener: (ev, el) => el.actions.updateColor(el)
+      listener: (ev, el) => el.wi.actions.updateColor(el)
     }
   ],
   actionList: [
@@ -249,7 +249,7 @@ webitem.defineElement({
       if (el !== this) {
         console.warn(`Warning: 'this' should be equal to 'el'`)
       }
-      el.properties.color = `background-color:${getRandomColor()}`
+      el.wi.properties.color = `background-color:${getRandomColor()}`
     }}
   ]
 })
@@ -264,10 +264,10 @@ The `actionList` is an array which contains objects with two keys:
 2. `action`: The definition of the action/function. **Note:** If you declare the action as a _classic_ function
    (as opposed to an arrow '`=>`' function) then its `this` variable will point to the web item itself.
 
-You can access actions through the `actions` property, so for the above example, you can:
+You can access actions through the `wi.actions` property, so for the above example, you can:
 
 ```js
-$('wi-t8').actions.updateColor()
+$('wi-t8').wi.actions.updateColor()
 ```
 
 ### Property's Change Callback
@@ -304,7 +304,7 @@ webitem.defineElement({
       eventName: 'click',
       listener: (ev, el) => {
         // getRandomColor() returns names of random colors
-        el.properties.color = getRandomColor()
+        el.wi.properties.color = getRandomColor()
       }
     }
   ]

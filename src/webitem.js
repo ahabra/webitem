@@ -26,8 +26,9 @@ export function defineElement({nameWithDash, html, css, display,
     constructor() {
       super()
       addHtml(this, html, css, display)
-      this.properties = bindProperties(this, propertyList)
-      this.actions = defineActions(this, actionList)
+      this.wi = {}
+      this.wi.properties = bindProperties(this, propertyList)
+      this.wi.actions = defineActions(this, actionList)
       addEventListeners(this, eventHandlerList)
     }
   }
