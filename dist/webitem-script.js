@@ -1,6 +1,6 @@
 // webitem.js Library to simplify creating HTML5 Custom Elements
 // https://github.com/ahabra/webitem
-// Copyright 2021 (C) Abdul Habra. Version 0.3.6.
+// Copyright 2021 (C) Abdul Habra. Version 0.4.0.
 // Apache License Version 2.0
 
 
@@ -537,10 +537,18 @@ ${t2}`;
     const el = class extends HTMLElement {
       constructor() {
         super();
+        const root = this;
         addHtml(this, html, css, display);
-        this.properties = bindProperties(this, propertyList);
-        this.actions = defineActions(this, actionList);
+        this.wi = {};
+        this.wi.properties = bindProperties(this, propertyList);
+        this.wi.actions = defineActions(this, actionList);
         addEventListeners(this, eventHandlerList);
+        this.wi.addProperty = function(name, value, sel, attr, onChange) {
+          const prop = {name, value, sel, attr, onChange};
+          addProperty(root.wi.properties, prop, root);
+        };
+        this.wi.addAction = (name, action) => addAction(root, root.wi.actions, name, action);
+        this.wi.addEventListener = (sel, eventName, listener) => addHandler(root, {sel, eventName, listener});
       }
     };
     customElements.define(nameWithDash, el);
@@ -578,11 +586,14 @@ ${t2}`;
     if (!actionList)
       return actions;
     actionList.forEach((pair) => {
-      if (pair.name && pair.action) {
-        actions[pair.name] = pair.action.bind(root);
-      }
+      addAction(root, actions, pair.name, pair.action);
     });
     return actions;
+  }
+  function addAction(root, actions, name, action) {
+    if (!Objecter_exports.isString(name) || !Objecter_exports.isFunction(action))
+      return;
+    actions[name] = action.bind(root);
   }
   function addEventListeners(root, eventHandlerList) {
     if (!eventHandlerList)
@@ -590,12 +601,13 @@ ${t2}`;
     if (!Array.isArray(eventHandlerList)) {
       throw "eventHandlerList must be an array of {sel, eventName, listener} objects";
     }
-    eventHandlerList.forEach((h) => {
-      const elements = Domer_exports.all(h.sel, root.shadowRoot);
-      elements.forEach((el) => {
-        el.addEventListener(h.eventName, (ev) => {
-          h.listener(ev, root);
-        });
+    eventHandlerList.forEach((h) => addHandler(root, h));
+  }
+  function addHandler(root, {sel, eventName, listener}) {
+    const elements = Domer_exports.all(sel, root.shadowRoot);
+    elements.forEach((el) => {
+      el.addEventListener(eventName, (ev) => {
+        listener(ev, root);
       });
     });
   }
