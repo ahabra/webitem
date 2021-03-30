@@ -16,6 +16,17 @@ import bind from '@techexp/data-bind'
  * display: Optional. String. CSS display attribute. One of inline (default), inline-block, block.
  * @returns true if the element was created, false if the element already exists, in which case
  * it will not be re-created.
+ *
+ * The created element is a standard DOM custom element with and extra property "wi" that
+ * contains the following members:
+ * properties: an object that contains all the defined properties in propertyList
+ * actions: an object that contains all the defined actions in actionList
+ * addProperty(name, value, sel, attr, onChange): a function with the given arguments to
+ * add new properties on the instance of the web element
+ * addAction(name, action): a function with the given arguments to add new actions
+ * on the instance of the web element
+ * addEventListener(sel, eventName, listener): a function with the given arguments to
+ * add new event listeners on the instance of the web element
  */
 export function defineElement({nameWithDash, html, css, display,
   propertyList, actionList, eventHandlerList}) {
@@ -25,11 +36,20 @@ export function defineElement({nameWithDash, html, css, display,
   const el = class extends HTMLElement {
     constructor() {
       super()
+      const root = this
       addHtml(this, html, css, display)
       this.wi = {}
       this.wi.properties = bindProperties(this, propertyList)
       this.wi.actions = defineActions(this, actionList)
       addEventListeners(this, eventHandlerList)
+
+      this.wi.addProperty = function(name, value, sel, attr, onChange) {
+        const prop = {name, value, sel, attr, onChange}
+        addProperty(root.wi.properties, prop, root)
+      }
+      this.wi.addAction = (name, action) => addAction(root, root.wi.actions, name, action)
+      this.wi.addEventListener = (sel, eventName, listener) => addHandler(root, {sel, eventName, listener})
+
     }
   }
   customElements.define(nameWithDash, el)
@@ -69,11 +89,14 @@ function defineActions(root, actionList) {
   const actions = {}
   if (!actionList) return actions
   actionList.forEach(pair => {
-    if (pair.name && pair.action) {
-      actions[pair.name] = pair.action.bind(root)
-    }
+    addAction(root, actions, pair.name, pair.action)
   })
   return actions
+}
+
+function addAction(root, actions, name, action) {
+  if (!Objecter.isString(name) || !Objecter.isFunction(action)) return
+  actions[name] = action.bind(root)
 }
 
 function addEventListeners(root, eventHandlerList) {
@@ -82,12 +105,14 @@ function addEventListeners(root, eventHandlerList) {
     throw 'eventHandlerList must be an array of {sel, eventName, listener} objects'
   }
 
-  eventHandlerList.forEach(h => {
-    const elements = Domer.all(h.sel, root.shadowRoot)
-    elements.forEach(el => {
-      el.addEventListener(h.eventName, ev => {
-        h.listener(ev, root)
-      })
+  eventHandlerList.forEach(h => addHandler(root, h))
+}
+
+function addHandler(root, {sel, eventName, listener}) {
+  const elements = Domer.all(sel, root.shadowRoot)
+  elements.forEach(el => {
+    el.addEventListener(eventName, ev => {
+      listener(ev, root)
     })
   })
 }

@@ -7,8 +7,6 @@ In modern HTML, you can create web components using
 This API is powerfull, but can be verbose and complicated. The _webitem.js_ library provides a wrapper
 around that API in an attempt to make it simple for the application's programmer.
 
-The size of this library, minified and zipped is about 2KB.
-
 ## Install
 You can use this library as either an EcmaScript module, or the old way as a script which you include in your html file.
 
@@ -98,6 +96,29 @@ object with the following keys:
 
 The `defineElement()` function returns true if the element was created, false if the element
 already exists, in which case it will not be re-created.
+
+The `defineElement()` function defines a standard _Custom Element_/_Web Component_ with all the
+standard properties. It also adds an extra property `wi` that contains extra properties and
+functions supported bby this library as follows:
+
+1.  `wi.properties`: An object with key/value as defined in the `propertyList` during element
+    definition.
+2.  `wi.actions`: an object whose keys are the actions names and value is the functions
+    as defined in the `actionList` during element definition.
+3.  `wi.addProperty(name, value, sel, attr, onChange)`: A function to add a new property
+    on the webitem. Note: The properties defined in the `propertyList` during element
+    definition are available to all instances of the web item. The properties added using
+    `wi.addProperty()` are available only to the particular instance of the web item in
+    the DOM.
+4.  `wi.addAction(name, action)`: A function to add a new action on the webitem. Note: The actions
+    defined in the `actionList` during element definition are available to all
+    instances of the web item. The actions added using `wi.addAction()` are available
+    only to the particular instance of the web item in the DOM.
+5.  `wi.addEventListener = (sel, eventName, listener)`:
+    A function to add a new event handler on the webitem. Note: The event handlers
+    defined in the `eventHandlerList` during element definition are available to all
+    instances of the web item. The event handler added using `wi.addEventListener()`
+    are available only to the particular instance of the web item in the DOM.
 
 #### Note About Using Common CSS Files
 CSS applied to a web component (_through shadow DOM_) is scoped to the component, it does not interact
@@ -317,6 +338,12 @@ webitem.defineElement({
 
 In the above example, we change the `color` property in the click listener, which will invoke the `onChange`
 callback on the property.
+
+## Change Log
+* 2021-03-29:
+  1. Move all custom properties and function to be inside a single object `wi`. This can
+     break code using version <= 0.3.6
+  2. Add new functions: `addProperty()`, `addAction()`, `addEventListener()`
 
 ## TODO
 This is my wishlist for this library:
