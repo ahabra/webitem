@@ -1,11 +1,11 @@
 // webitem.js Library to simplify creating HTML5 Custom Elements
 // https://github.com/ahabra/webitem
-// Copyright 2021 (C) Abdul Habra. Version 0.4.1.
+// Copyright 2021 (C) Abdul Habra. Version 0.4.2.
 // Apache License Version 2.0
 
 
 // src/webitem.js
-import {Domer, Objecter, Stringer} from "@techexp/jshelper";
+import { Domer, Objecter, Stringer } from "@techexp/jshelper";
 import bind from "@techexp/data-bind";
 function defineElement({
   nameWithDash,
@@ -28,11 +28,11 @@ function defineElement({
       this.wi.actions = defineActions(this, actionList);
       addEventListeners(this, eventHandlerList);
       this.wi.addProperty = function(name, value, sel, attr, onChange) {
-        const prop = {name, value, sel, attr, onChange};
+        const prop = { name, value, sel, attr, onChange };
         addProperty(root.wi.properties, prop, root);
       };
       this.wi.addAction = (name, action) => addAction(root, root.wi.actions, name, action);
-      this.wi.addEventListener = (sel, eventName, listener) => addHandler(root, {sel, eventName, listener});
+      this.wi.addEventListener = (sel, eventName, listener) => addHandler(root, { sel, eventName, listener });
     }
   };
   customElements.define(nameWithDash, el);
@@ -47,7 +47,7 @@ function bindProperties(root, propertyList) {
 }
 function addProperty(obj, prop, root) {
   const onChange = createOnChange(prop, root);
-  bind({obj, prop: prop.name, sel: prop.sel, attr: prop.attr, root: root.shadowRoot, onChange});
+  bind({ obj, prop: prop.name, sel: prop.sel, attr: prop.attr, root: root.shadowRoot, onChange });
   if (prop.value !== void 0) {
     obj[prop.name] = prop.value;
   }
@@ -87,7 +87,7 @@ function addEventListeners(root, eventHandlerList) {
   }
   eventHandlerList.forEach((h) => addHandler(root, h));
 }
-function addHandler(root, {sel, eventName, listener}) {
+function addHandler(root, { sel, eventName, listener }) {
   const elements = Domer.all(sel, root.shadowRoot);
   elements.forEach((el) => {
     el.addEventListener(eventName, (ev) => {
@@ -97,7 +97,7 @@ function addHandler(root, {sel, eventName, listener}) {
 }
 function addHtml(root, html, css, display) {
   html = getHtml(root, html);
-  const shadow = root.attachShadow({mode: "open"});
+  const shadow = root.attachShadow({ mode: "open" });
   const nodes = Domer.createElements(getCss(css, display) + html);
   shadow.append(...nodes);
 }

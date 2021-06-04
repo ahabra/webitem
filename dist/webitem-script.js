@@ -1,6 +1,6 @@
 // webitem.js Library to simplify creating HTML5 Custom Elements
 // https://github.com/ahabra/webitem
-// Copyright 2021 (C) Abdul Habra. Version 0.4.1.
+// Copyright 2021 (C) Abdul Habra. Version 0.4.2.
 // Apache License Version 2.0
 
 
@@ -8,7 +8,7 @@ var webitem = (() => {
   var __defProp = Object.defineProperty;
   var __export = (target, all2) => {
     for (var name in all2)
-      __defProp(target, name, {get: all2[name], enumerable: true});
+      __defProp(target, name, { get: all2[name], enumerable: true });
   };
 
   // src/webitem.js
@@ -21,7 +21,7 @@ var webitem = (() => {
   var __defProp2 = Object.defineProperty;
   var __export2 = (target, all2) => {
     for (var name in all2)
-      __defProp2(target, name, {get: all2[name], enumerable: true});
+      __defProp2(target, name, { get: all2[name], enumerable: true });
   };
   var Domer_exports = {};
   __export2(Domer_exports, {
@@ -416,9 +416,9 @@ var webitem = (() => {
   __export2(LineCompare_exports, {
     compareLines: () => compareLines
   });
-  function compareLines(t1, t2, {trim: trim2 = true, skipEmpty = true, caseSensitive = true} = {trim: true, skipEmpty: true, caseSensitive: true}) {
-    t1 = toLines(t1, {trim: trim2, skipEmpty});
-    t2 = toLines(t2, {trim: trim2, skipEmpty});
+  function compareLines(t1, t2, { trim: trim2 = true, skipEmpty = true, caseSensitive = true } = { trim: true, skipEmpty: true, caseSensitive: true }) {
+    t1 = toLines(t1, { trim: trim2, skipEmpty });
+    t2 = toLines(t2, { trim: trim2, skipEmpty });
     if (t1.length !== t2.length) {
       return `t1 has ${t1.length} lines(s) while t2 has ${t2.length} line(s).`;
     }
@@ -440,7 +440,7 @@ ${t2}`;
     }
     return "";
   }
-  function toLines(t, {trim: trim2, skipEmpty}) {
+  function toLines(t, { trim: trim2, skipEmpty }) {
     if (trim2) {
       t = trim(t);
     }
@@ -469,14 +469,14 @@ ${t2}`;
     checkInitialValue(obj, prop);
     const objNotBound = {};
     if (!getter) {
-      getter = () => getValue({prop, sel, attr, root, objNotBound});
+      getter = () => getValue({ prop, sel, attr, root, objNotBound });
     }
     if (!setter) {
-      setter = (value) => setValue({prop, value, root, sel, attr, objNotBound});
+      setter = (value) => setValue({ prop, value, root, sel, attr, objNotBound });
     }
-    return bindProp({obj, prop, getter, setter, onChange});
+    return bindProp({ obj, prop, getter, setter, onChange });
   }
-  function bindProp({obj, prop, getter, setter, onChange}) {
+  function bindProp({ obj, prop, getter, setter, onChange }) {
     const descriptor = {
       get: () => getter(),
       set: (value) => {
@@ -496,7 +496,8 @@ ${t2}`;
   }
   var isCheckbox = (el) => el.type === "checkbox";
   var isRadio = (el) => el.type === "radio";
-  var isSelect = (el) => el.tagName.toLowerCase() === "select";
+  var isSelect = (el) => el.nodeName.toLowerCase() === "select";
+  var isInputField = (el) => el.nodeName.toLowerCase() === "input-field";
   var isInput = (el) => "value" in el;
   var toSet = (v) => new Set(Array.isArray(v) ? v : [v]);
   function checkInitialValue(obj, prop) {
@@ -507,12 +508,12 @@ ${t2}`;
     }
     return oldValue;
   }
-  function getValue({prop, root, sel, attr, objNotBound}) {
+  function getValue({ prop, root, sel, attr, objNotBound }) {
     if (sel)
       return getDomVal(root, sel, attr);
     return objNotBound[prop];
   }
-  function setValue({prop, value, root, sel, attr, objNotBound}) {
+  function setValue({ prop, value, root, sel, attr, objNotBound }) {
     if (sel) {
       setDomVal(root, sel, value, attr);
       return;
@@ -539,6 +540,9 @@ ${t2}`;
       el = elements.filter(isRadio).find((e) => e.checked);
       if (!el)
         return void 0;
+    }
+    if (isInputField(el)) {
+      return el.getAttribute("value");
     }
     return el.value;
   }
@@ -568,6 +572,8 @@ ${t2}`;
       el.setAttribute(attr, val);
     } else if (isInput(el)) {
       el.value = val;
+    } else if (isInputField(el)) {
+      el.setAttribute("value", val);
     } else {
       el.innerHTML = val;
     }
@@ -607,11 +613,11 @@ ${t2}`;
         this.wi.actions = defineActions(this, actionList);
         addEventListeners(this, eventHandlerList);
         this.wi.addProperty = function(name, value, sel, attr, onChange) {
-          const prop = {name, value, sel, attr, onChange};
+          const prop = { name, value, sel, attr, onChange };
           addProperty(root.wi.properties, prop, root);
         };
         this.wi.addAction = (name, action) => addAction(root, root.wi.actions, name, action);
-        this.wi.addEventListener = (sel, eventName, listener) => addHandler(root, {sel, eventName, listener});
+        this.wi.addEventListener = (sel, eventName, listener) => addHandler(root, { sel, eventName, listener });
       }
     };
     customElements.define(nameWithDash, el);
@@ -626,7 +632,7 @@ ${t2}`;
   }
   function addProperty(obj, prop, root) {
     const onChange = createOnChange(prop, root);
-    bind({obj, prop: prop.name, sel: prop.sel, attr: prop.attr, root: root.shadowRoot, onChange});
+    bind({ obj, prop: prop.name, sel: prop.sel, attr: prop.attr, root: root.shadowRoot, onChange });
     if (prop.value !== void 0) {
       obj[prop.name] = prop.value;
     }
@@ -666,7 +672,7 @@ ${t2}`;
     }
     eventHandlerList.forEach((h) => addHandler(root, h));
   }
-  function addHandler(root, {sel, eventName, listener}) {
+  function addHandler(root, { sel, eventName, listener }) {
     const elements = Domer_exports.all(sel, root.shadowRoot);
     elements.forEach((el) => {
       el.addEventListener(eventName, (ev) => {
@@ -676,7 +682,7 @@ ${t2}`;
   }
   function addHtml(root, html, css, display) {
     html = getHtml(root, html);
-    const shadow = root.attachShadow({mode: "open"});
+    const shadow = root.attachShadow({ mode: "open" });
     const nodes = Domer_exports.createElements(getCss(css, display) + html);
     shadow.append(...nodes);
   }
