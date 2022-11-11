@@ -1,6 +1,6 @@
 {
   "name": "@techexp/webitem",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "Library to simplify crerating Web Components/Custom Elements",
   "author": "Abdul Habra",
   "license": "Apache",
