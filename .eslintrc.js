@@ -15,7 +15,7 @@ module.exports = {
         ecmaVersion: 12,
         sourceType: 'module'
     },
-    
+
     globals: {
         describe: readonly,
         it: readonly,
@@ -52,11 +52,11 @@ module.exports = {
         'key-spacing': [error, {beforeColon: false, afterColon:true}],
         'keyword-spacing': [error],
         'max-depth': [error, 4],
-        'max-len': [error, {code: 100, comments: 100, ignoreUrls: true}],
-        'max-lines': [error, {max: 200, skipBlankLines: true, skipComments: false}],
+        'max-len': [error, {code: 120, comments: 100, ignoreUrls: true}],
+        'max-lines': [error, {max: 250, skipBlankLines: true, skipComments: false}],
         'max-lines-per-function': [error, {max: 200, skipBlankLines: true, skipComments: true, IIFEs: false}],
         'max-nested-callbacks': [error, 4],
-        'max-params': [error, 4],
+        'max-params': [error, 5],
         'max-statements': [error, 10],
         'max-statements-per-line': [error, {max: 2}],
         'new-cap': [error],

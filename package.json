@@ -6,6 +6,7 @@
   "license": "Apache",
   "repository": "ahabra/webitem",
   "main": "dist/webitem-esm.js",
+  "type": "commonjs",
   "keywords": [
     "web component",
     "custom element"
@@ -18,9 +19,9 @@
     "access": "public"
   },
   "scripts": {
-    "clean": "node scripts/clean.js",
-    "build": "node scripts/build.js",
-    "server": "node scripts/server.js",
+    "clean": "node scripts/clean.mjs",
+    "build": "node scripts/build.mjs",
+    "server": "node scripts/server.mjs",
     "test": "web-test-runner",
     "test:watch": "web-test-runner --watch",
     "lint": "eslint src --fix",
@@ -29,18 +30,18 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@web/test-runner": "^0.13.5",
-    "@web/test-runner-commands": "^0.5.0",
-    "@web/test-runner-puppeteer": "^0.10.0",
-    "chalk": "^4.1.1",
-    "esbuild": "^0.12.5",
-    "eslint": "^7.27.0",
-    "fs-extra": "^10.0.0",
-    "npm-check-updates": "^11.6.0",
-    "serve": "^11.3.2"
+    "@web/test-runner": "^0.15.0",
+    "@web/test-runner-commands": "^0.6.5",
+    "@web/test-runner-puppeteer": "^0.11.0",
+    "chalk": "^5.1.2",
+    "esbuild": "^0.15.13",
+    "eslint": "^8.27.0",
+    "fs-extra": "^10.1.0",
+    "npm-check-updates": "^16.3.18",
+    "serve": "^14.1.1"
   },
   "dependencies": {
-    "@techexp/data-bind": "^0.8.0",
-    "@techexp/jshelper": "^0.5.1"
+    "@techexp/data-bind": "^0.9.0",
+    "@techexp/jshelper": "^0.6.1"
   }
 }

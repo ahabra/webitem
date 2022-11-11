@@ -5,57 +5,59 @@ import {Domer, Objecter} from '@techexp/jshelper'
 
 describe('webitem.defineElement()', () => {
 
-  it('creates a new element', () => {
-    const name = 'wi-t1'
-    webitem.defineElement({nameWithDash: name})
-    createAndAddElement(name)
-    createAndAddElement(name)
-    const found = document.getElementsByTagName(name)
+  describe('element creattion', () => {
+    it('creates a new element', () => {
+      const name = 'wi-t1'
+      webitem.defineElement({nameWithDash: name})
+      createAndAddElement(name)
+      createAndAddElement(name)
+      const found = document.getElementsByTagName(name)
 
-    expect(found.length).to.equal(2)
-  })
+      expect(found.length).to.equal(2)
+    })
 
-  it('creates element with html and css', () => {
-    const nameWithDash = 'wi-t2'
-    const html = '<h1>42</h1>'
-    const css = 'h1 { color: red; }'
-    webitem.defineElement({nameWithDash, html, css})
-    createAndAddElement(nameWithDash)
-    const found = findElementByName(nameWithDash)
+    it('creates element with html and css', () => {
+      const nameWithDash = 'wi-t2'
+      const html = '<h1>42</h1>'
+      const css = 'h1 { color: red; }'
+      webitem.defineElement({nameWithDash, html, css})
+      createAndAddElement(nameWithDash)
+      const found = findElementByName(nameWithDash)
 
-    expect(found.shadowRoot.innerHTML).to.equal(`<style>${css}</style>${html}`)
-  })
+      expect(found.shadowRoot.innerHTML).to.equal(`<style>${css}</style>${html}`)
+    })
 
-  it('creates element with html function', () => {
-    const nameWithDash = 'wi-t3'
+    it('creates element with html function', () => {
+      const nameWithDash = 'wi-t3'
 
-    function html(el) {
-      const h = el.innerHTML
-      return `<b>${h}</b>`
-    }
+      function html(el) {
+        const h = el.innerHTML
+        return `<b>${h}</b>`
+      }
 
-    webitem.defineElement({nameWithDash, html})
-    createAndAddElement(nameWithDash, 42)
+      webitem.defineElement({nameWithDash, html})
+      createAndAddElement(nameWithDash, 42)
 
-    const found = findElementByName(nameWithDash)
-    expect(found.shadowRoot.innerHTML).to.equal('<b>42</b>')
-  })
+      const found = findElementByName(nameWithDash)
+      expect(found.shadowRoot.innerHTML).to.equal('<b>42</b>')
+    })
 
-  it('creates element with simple properties', () => {
-    const nameWithDash = 'wi-t4'
-    const propertyList = [
-      {name: 'p1', value: 'v1'},
-      {name: 'p2', value: 'v2'}
-    ]
-    webitem.defineElement({nameWithDash, propertyList})
-    createAndAddElement(nameWithDash)
+    it('creates element with simple properties', () => {
+      const nameWithDash = 'wi-t4'
+      const propertyList = [
+        {name: 'p1', value: 'v1'},
+        {name: 'p2', value: 'v2'}
+      ]
+      webitem.defineElement({nameWithDash, propertyList})
+      createAndAddElement(nameWithDash)
 
-    const found = findElementByName(nameWithDash)
-    expect(found.wi.properties.p1).to.equal('v1')
-    expect(found.wi.properties.p2).to.equal('v2')
+      const found = findElementByName(nameWithDash)
+      expect(found.wi.properties.p1).to.equal('v1')
+      expect(found.wi.properties.p2).to.equal('v2')
 
-    found.wi.properties.p1 = 10
-    expect(found.wi.properties.p1).to.equal(10)
+      found.wi.properties.p1 = 10
+      expect(found.wi.properties.p1).to.equal(10)
+    })
   })
 
   describe('bounded properties', () => {
@@ -236,7 +238,7 @@ describe('webitem.defineElement()', () => {
       webitem.defineElement({nameWithDash, html})
       const el = createAndAddElement(nameWithDash)
       let counter = 0
-      el.wi.addEventListener('button', 'click', (ev, root)=> counter++ )
+      el.wi.addEventListener('button', 'click', ()=> counter++ )
 
       const button = Domer.first('button', el)
       button.click()
