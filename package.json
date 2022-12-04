@@ -6,7 +6,6 @@
   "license": "Apache",
   "repository": "ahabra/webitem",
   "main": "dist/webitem-esm.js",
-  "type": "commonjs",
   "keywords": [
     "web component",
     "custom element"
@@ -42,6 +41,6 @@
   },
   "dependencies": {
     "@techexp/data-bind": "^0.9.0",
-    "@techexp/jshelper": "^0.6.1"
+    "@techexp/jshelper": "^0.6.2"
   }
 }
