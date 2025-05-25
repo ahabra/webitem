@@ -5,13 +5,13 @@ This file contains info to help the developer of the library.
 
 ## Project Directory Structure
 
-1. The root of the project conatins these files
+1. The root of the project contains these files
     1. `.ackrc`: Config for [Ack](https://beyondgrep.com/) grep tool
     2. `.editorconfig`: Config for [EditorConfig](https://editorconfig.org/)
     3. `.eslintrc`: ES Lint customized rules
     4. `.gitignore`: List of files to be ignored by git
     5. `.npmrc`: Configuration for npm.
-    6. `LICENSE`: License file, usaing Apache v 2.0
+    6. `LICENSE`: License file, using Apache v 2.0
     7. `package.json`, `package-lock.json`: NPM package definition.
     8. `README.md`: Info about using the library.
     9. `README-dev.md`: This file.

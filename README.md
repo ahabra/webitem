@@ -4,7 +4,7 @@ A library to simplify creating HTML5 Web Components (Custom Elements).
 ## Introduction
 In modern HTML, you can create web components using
 [customElements.define()](https://developer.mozilla.org/en-US/docs/Web/Web_Components).
-This API is powerfull, but can be verbose and complicated. The _webitem.js_ library provides a wrapper
+This API is powerful, but can be verbose and complicated. The _webitem.js_ library provides a wrapper
 around that API in an attempt to make it simple for the application's programmer.
 
 ## Install
@@ -125,7 +125,7 @@ CSS applied to a web component (_through shadow DOM_) is scoped to the component
 with CSS outside the component.
 
 If you need to use a common CSS file within the component, a possible solution is to use
-the `<link>` tag in the component's html, for exmaple, add the next line at the top of your component's html:
+the `<link>` tagDef in the component's html, for exmaple, add the next line at the top of your component's html:
 
 ```html
 <link rel="stylesheet" href="css/common.css">

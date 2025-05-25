@@ -17,8 +17,7 @@ function defineElement({
   actionList,
   eventHandlerList
 }) {
-  if (customElements.get(nameWithDash))
-    return false;
+  if (customElements.get(nameWithDash)) return false;
   const el = class extends HTMLElement {
     constructor() {
       super();
@@ -41,8 +40,7 @@ function defineElement({
 }
 function bindProperties(root, propertyList) {
   const result = {};
-  if (!validatePropertyList(propertyList))
-    return result;
+  if (!validatePropertyList(propertyList)) return result;
   propertyList.forEach((p) => addProperty(result, p, root));
   return result;
 }
@@ -54,13 +52,11 @@ function addProperty(obj, prop, root) {
   }
 }
 function createOnChange(prop, root) {
-  if (!prop.onChange)
-    return void 0;
+  if (!prop.onChange) return void 0;
   return (oldValue, newValue) => prop.onChange(root, oldValue, newValue);
 }
 function validatePropertyList(propertyList) {
-  if (!propertyList)
-    return false;
+  if (!propertyList) return false;
   if (!Array.isArray(propertyList)) {
     throw "propertyList must be an array of {name, value, [sel], [attr]} objects";
   }
@@ -68,21 +64,18 @@ function validatePropertyList(propertyList) {
 }
 function defineActions(root, actionList) {
   const actions = {};
-  if (!actionList)
-    return actions;
+  if (!actionList) return actions;
   actionList.forEach((pair) => {
     addAction(root, actions, pair.name, pair.action);
   });
   return actions;
 }
 function addAction(root, actions, name, action) {
-  if (!Objecter.isString(name) || !Objecter.isFunction(action))
-    return;
+  if (!Objecter.isString(name) || !Objecter.isFunction(action)) return;
   actions[name] = action.bind(root);
 }
 function addEventListeners(root, eventHandlerList) {
-  if (!eventHandlerList)
-    return;
+  if (!eventHandlerList) return;
   if (!Array.isArray(eventHandlerList)) {
     throw "eventHandlerList must be an array of {sel, eventName, listener} objects";
   }
@@ -110,8 +103,7 @@ function getCss(css, display) {
 }
 function buildCss(css) {
   css = Stringer.trim(css);
-  if (css.length === 0)
-    return "";
+  if (css.length === 0) return "";
   if (!Stringer.startsWith(css, "<style>", false)) {
     css = Domer.tag("style", {}, css);
   }
@@ -119,8 +111,7 @@ function buildCss(css) {
 }
 function displayStyle(display) {
   display = Stringer.trim(display);
-  if (display.length === 0)
-    return "";
+  if (display.length === 0) return "";
   return `
   <style>
     :host { display: ${display};}
