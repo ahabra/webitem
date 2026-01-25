@@ -3,32 +3,35 @@ import bind from '@techexp/data-bind'
 
 /**
  * Define a custom element
+ *
  * @param options An object containing the following fields
- * nameWithDash: Required. String. Name of the custom element.
- * html: Optional. String or Function. The HTML content of the element
- * css: Optional. String. The CSS to apply on the element
- * propertyList: Optional. Array. Objects defining properties of the element. Each property
+ * * `nameWithDash`: Required. String. Name of the custom element.
+ * * `html`: Optional. String or Function. The HTML content of the element
+ * * `css`: Optional. String. The CSS to apply on the element
+ * * `styleSheets`: Optional: An array of `CSSStyleSheet` objects. This way you can share
+ * style sheets among components.
+ * * `propertyList`: Optional. Array. Objects defining properties of the element. Each property
  * definition consists of {name, value, [sel], [attr], [onChange]}
- * actionList: Optional. Array. Objects defining actions. Each action definition consists of
+ * * `actionList`: Optional. Array. Objects defining actions. Each action definition consists of
  * {name, action}, where action is a function definition.
- * eventHandlerList: Optional. Array. Objects defining event handlers of element. Each
+ * * `eventHandlerList`: Optional. Array. Objects defining event handlers of element. Each
  * handler definition consists of {sel, eventName, listener}
- * display: Optional. String. CSS display attribute. One of inline (default), inline-block, block.
- * @returns true if the element was created, false if the element already exists, in which case
+ * * `display`: Optional. String. CSS display attribute. One of inline (default), inline-block, block.
+ * @returns `true` if the element was created, `false` if the element already exists, in which case
  * it will not be re-created.
  *
- * The created element is a standard DOM custom element with and extra property "wi" that
+ * The created element is a standard DOM custom element with and extra property `wi` that
  * contains the following members:
- * properties: an object that contains all the defined properties in propertyList
- * actions: an object that contains all the defined actions in actionList
- * addProperty(name, value, sel, attr, onChange): a function with the given arguments to
+ * * `properties`: an object that contains all the defined properties in propertyList
+ * * `actions`: an object that contains all the defined actions in actionList
+ * * `addProperty(name, value, sel, attr, onChange)`: a function with the given arguments to
  * add new properties on the instance of the web element
- * addAction(name, action): a function with the given arguments to add new actions
+ * * `addAction(name, action)`: a function with the given arguments to add new actions
  * on the instance of the web element
- * addEventListener(sel, eventName, listener): a function with the given arguments to
+ * * `addEventListener(sel, eventName, listener)`: a function with the given arguments to
  * add new event listeners on the instance of the web element
  */
-export function defineElement({nameWithDash, html, css, display,
+export function defineElement({nameWithDash, html, css, styleSheets, display,
   propertyList, actionList, eventHandlerList}) {
 
   if (customElements.get(nameWithDash)) return false
@@ -37,7 +40,7 @@ export function defineElement({nameWithDash, html, css, display,
     constructor() {
       super()
       const root = this
-      addHtml(this, html, css, display)
+      addHtml(this, html, css, styleSheets, display)
       this.wi = {}
       this.wi.properties = bindProperties(this, propertyList)
       this.wi.actions = defineActions(this, actionList)
@@ -117,12 +120,15 @@ function addHandler(root, {sel, eventName, listener}) {
   })
 }
 
-function addHtml(root, html, css, display) {
+function addHtml(root, html, css, styleSheets, display) {
   html = getHtml(root, html)
 
   const shadow = root.attachShadow({mode: 'open'})
   const nodes = Domer.createElements(getCss(css, display) + html)
   shadow.append(...nodes)
+  if (Array.isArray(styleSheets) && styleSheets.length > 0) {
+    shadow.adoptedStyleSheets.push(...styleSheets)
+  }
 }
 
 function getHtml(root, html) {

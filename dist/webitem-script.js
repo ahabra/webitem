@@ -1,6 +1,6 @@
 // webitem.js Library to simplify creating HTML5 Custom Elements
 // https://github.com/ahabra/webitem
-// Copyright 2021 (C) Abdul Habra. Version 0.6.0.
+// Copyright 2021 (C) Abdul Habra. Version 0.7.0.
 // Apache License Version 2.0
 
 
@@ -575,6 +575,7 @@ ${t2}`;
     nameWithDash,
     html,
     css,
+    styleSheets,
     display,
     propertyList,
     actionList,
@@ -585,7 +586,7 @@ ${t2}`;
       constructor() {
         super();
         const root = this;
-        addHtml(this, html, css, display);
+        addHtml(this, html, css, styleSheets, display);
         this.wi = {};
         this.wi.properties = bindProperties(this, propertyList);
         this.wi.actions = defineActions(this, actionList);
@@ -652,11 +653,14 @@ ${t2}`;
       });
     });
   }
-  function addHtml(root, html, css, display) {
+  function addHtml(root, html, css, styleSheets, display) {
     html = getHtml(root, html);
     const shadow = root.attachShadow({ mode: "open" });
     const nodes = Domer_exports.createElements(getCss(css, display) + html);
     shadow.append(...nodes);
+    if (Array.isArray(styleSheets) && styleSheets.length > 0) {
+      shadow.adoptedStyleSheets.push(...styleSheets);
+    }
   }
   function getHtml(root, html) {
     return Objecter_exports.isFunction(html) ? html(root) : html;

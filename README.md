@@ -71,7 +71,8 @@ object with the following keys:
     `(webitem) => string`. Look down for an example.
 3. `css`: Optional, String. The CSS to apply on the web component. This CSS will be name-spaced
    within the component, and is not visible outside it.
-4. `propertyList`: Optional, Array of objects. Objects defining properties of the component. Each property
+4. `styleSheets`: Optional, array of `CSSStyleSheet` objects. This way you can share style sheets among components.
+5. `propertyList`: Optional, Array of objects. Objects defining properties of the component. Each property
    definition consists of `{name, value, [sel], [attr]}`.
     1. `name`: Name of the property.
     2. `value`: Initial value of the property.
@@ -79,18 +80,18 @@ object with the following keys:
     4. `attr`: Optional, String. An attribute on the DOM element to bind its value.
     5. `onChange`: Optional. Function. A function to be called when the property's value change through
        an API call. The function can take three arguments `(webitem, oldValue, newValue)`
-5. `eventHandlerList`: Optional, Array of objects. Objects define event handlers of the component.
+6. `eventHandlerList`: Optional, Array of objects. Objects define event handlers of the component.
     Each event handler definition consists of `{sel, eventName, listener}`.
     1. `sel`: A CSS selector of an element in the component.
     2. `eventName`: Name of the event to bind to, e.g. `click`.
     3. `listener`: A function to be called when the event occures. The function accepts two arguments,
        an [event](https://developer.mozilla.org/en-US/docs/Web/API/Event) object, and `webitem` which is the web component.
-6. `actionList`: Optional, Array of objects. Objects define actions that can be defined on the component.
+7. `actionList`: Optional, Array of objects. Objects define actions that can be defined on the component.
     Each action definition consists of `{name, action}`.
     1. `name`: Name of the action.
     2. `action`: a function definition. If you declare this function as a _classic_ (not arrow) function, using
         `this` inside the function will refer to the component.
-7. `display`: Optional, String. A CSS display attribute. A possible value can be
+8. `display`: Optional, String. A CSS display attribute. A possible value can be
    `inline` (default if missing), `inline-block`, or `block`. This controls how the component is displayed
    inside its container.
 
@@ -99,7 +100,7 @@ already exists, in which case it will not be re-created.
 
 The `defineElement()` function defines a standard _Custom Element_/_Web Component_ with all the
 standard properties. It also adds an extra property `wi` that contains extra properties and
-functions supported bby this library as follows:
+functions supported by this library as follows:
 
 1.  `wi.properties`: An object with key/value as defined in the `propertyList` during element
     definition.
@@ -124,8 +125,27 @@ functions supported bby this library as follows:
 CSS applied to a web component (_through shadow DOM_) is scoped to the component, it does not interact
 with CSS outside the component.
 
-If you need to use a common CSS file within the component, a possible solution is to use
-the `<link>` tagDef in the component's html, for exmaple, add the next line at the top of your component's html:
+If you need to use a common CSS among components, there are two options:
+
+1. Use `CSSStyleSheet` object and pass in the `styleSheets` option. This is the recommended approach.
+For example:
+
+```js
+const sheet = new CSSStyleSheet()
+sheet.replaceSync('h3 { color: red; }')
+
+webitem.defineElement({
+  nameWithDash: 'with-sheets',
+  html: `
+    <div style="background-color:green">
+      <h3>with-sheets Web Item</h3>
+    </div>
+  `,
+  styleSheets: [sheet]
+})
+```
+
+2. Use the `<link>` tag in the component's html, for example, add the next line at the top of your component's html:
 
 ```html
 <link rel="stylesheet" href="css/common.css">
@@ -137,7 +157,7 @@ Next we will show some as well.
 
 ### Provide html as a function
 This example shows how to provide the html content of the component as a function. The function takes
-the comonent itself as an argument and returns a string representing the html of the component.
+the component itself as an argument and returns a string representing the html of the component.
 
 This approach allows you to introspect the definition of the element as given on the page.
 
@@ -210,7 +230,7 @@ console.log($('#bounded').wi.properties.country) // prints USA
 The binding is _bi-directional_, changing the property's value will change the view, and changing the
 value in the view will change the property's value.
 
-Binding properties to DOM elements is optional, you can choose to define a proiperty without `sel` value.
+Binding properties to DOM elements is optional, you can choose to define a property without `sel` value.
 
 For more details about bound properties, check [Data Bind](https://www.npmjs.com/package/@techexp/data-bind)
 NPM package which is used by this library.

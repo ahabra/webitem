@@ -5,7 +5,7 @@ import {Domer, Objecter} from '@techexp/jshelper'
 
 describe('webitem.defineElement()', () => {
 
-  describe('element creattion', () => {
+  describe('element creation', () => {
     it('creates a new element', () => {
       const name = 'wi-t1'
       webitem.defineElement({nameWithDash: name})
