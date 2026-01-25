@@ -127,7 +127,7 @@ with CSS outside the component.
 
 If you need to use a common CSS among components, there are two options:
 
-1. Use `CSSStyleSheet` object and pass in the `styleSheets` option. This is the recommended approach.
+1. Use `CSSStyleSheet` object and pass to the `styleSheets` option. This is the recommended approach.
 For example:
 
 ```js
@@ -150,6 +150,8 @@ webitem.defineElement({
 ```html
 <link rel="stylesheet" href="css/common.css">
 ```
+
+Usually, this options is slower.
 
 ## Examples
 There is a full set of examples in the repo's `src/` directory in both `index.html` and `test/webitem.test.js`.
