@@ -214,7 +214,7 @@ describe('webitem.defineElement()', () => {
       expect(el.wi.actions.foo()).to.equal(42)
     })
 
-    it('added action has its [this] equal to the webelement instance', ()=> {
+    it('added action has its [this] equal to the webItem instance', ()=> {
       const nameWithDash = 'wi-t14'
       const html = `<h3>${nameWithDash} - addAction - THIS</h3>`
       webitem.defineElement({nameWithDash, html})
@@ -225,6 +225,19 @@ describe('webitem.defineElement()', () => {
       })
 
       expect(el.wi.actions.foo()).to.equal(el)
+    })
+
+    it('passes element parameters to action', ()=> {
+      const nameWithDash = 'wi-t14-1'
+      const html = `<h3>${nameWithDash} - addAction - argument</h3>`
+      webitem.defineElement({nameWithDash, html})
+      const el = createAndAddElement(nameWithDash)
+
+      el.wi.addAction('add', function(a, b, c) {
+        return a + b + c
+      })
+
+      expect(el.wi.actions.add(1, 2, 3)).to.equal(6)
     })
 
   })
