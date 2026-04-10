@@ -120,6 +120,8 @@ functions supported by this library as follows:
     defined in the `eventHandlerList` during element definition are available to all
     instances of the web item. The event handler added using `wi.addEventListener()`
     are available only to the particular instance of the web item in the DOM.
+6. `wi.addCss(css)`: Add CSS text to this web element. The CSS will be added as
+    a `CSSStyleSheet` object
 
 #### Note About Using Common CSS Files
 CSS applied to a web component (_through shadow DOM_) is scoped to the component, it does not interact
@@ -362,6 +364,7 @@ In the above example, we change the `color` property in the click listener, whic
 callback on the property.
 
 ## Change Log
+* 2025-04-09: Add `addCss(css)` function.
 * 2021-03-29:
   1. Move all custom properties and function to be inside a single object `wi`. This can
      break code using version <= 0.3.6

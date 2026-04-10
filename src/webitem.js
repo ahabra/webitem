@@ -30,6 +30,7 @@ import bind from '@techexp/data-bind'
  * on the instance of the web element
  * * `addEventListener(sel, eventName, listener)`: a function with the given arguments to
  * add new event listeners on the instance of the web element
+ * * `addCss(css)`: a function that will add live css to the current web element
  */
 export function defineElement({nameWithDash, html, css, styleSheets, display,
   propertyList, actionList, eventHandlerList}) {
@@ -52,7 +53,7 @@ export function defineElement({nameWithDash, html, css, styleSheets, display,
       }
       this.wi.addAction = (name, action) => addAction(root, root.wi.actions, name, action)
       this.wi.addEventListener = (sel, eventName, listener) => addHandler(root, {sel, eventName, listener})
-
+      this.wi.addCss = css => addCss(root, css)
     }
   }
   customElements.define(nameWithDash, el)
@@ -159,4 +160,15 @@ function displayStyle(display) {
   </style>
   `
 }
+
+function addCss(root, css) {
+  css = Stringer.trim(css)
+  if (css.length === 0) return
+  // TODO prevent adding the same CSS if it is already there
+
+  const sheet = new CSSStyleSheet()
+  sheet.replaceSync(css)
+  root.shadowRoot.adoptedStyleSheets.push(sheet)
+}
+
 

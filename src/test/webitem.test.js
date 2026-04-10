@@ -260,6 +260,27 @@ describe('webitem.defineElement()', () => {
     })
   })
 
+  describe('addCss', ()=> {
+    it('adds CSS to the element', ()=> {
+      const nameWithDash = 'wi-t16'
+      const html = `<h3>${nameWithDash} - addCss</h3>`
+
+      webitem.defineElement({nameWithDash, html})
+      const el = createAndAddElement(nameWithDash)
+
+      const h3 = Domer.first('h3', el.shadowRoot)
+      const initialColor = window.getComputedStyle(h3).color
+
+      el.wi.addCss(`h3 {color: red !important}`)
+
+      const newColor = window.getComputedStyle(h3).color
+      expect(newColor).to.not.equal(initialColor)
+      expect(newColor).to.equal('rgb(255, 0, 0)')
+    })
+
+
+  })
+
 }) // webitem.defineElement()
 
 function findElementByName(name) {
