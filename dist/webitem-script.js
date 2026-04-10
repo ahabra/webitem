@@ -1,6 +1,6 @@
 // webitem.js Library to simplify creating HTML5 Custom Elements
 // https://github.com/ahabra/webitem
-// Copyright 2021 (C) Abdul Habra. Version 0.7.2.
+// Copyright 2021 (C) Abdul Habra. Version 0.8.0.
 // Apache License Version 2.0
 
 
@@ -597,6 +597,7 @@ ${t2}`;
         };
         this.wi.addAction = (name, action) => addAction(root, root.wi.actions, name, action);
         this.wi.addEventListener = (sel, eventName, listener) => addHandler(root, { sel, eventName, listener });
+        this.wi.addCss = (css2) => addCss(root, css2);
       }
     };
     customElements.define(nameWithDash, el);
@@ -685,6 +686,13 @@ ${t2}`;
     :host([hidden]) {display: none;}
   </style>
   `;
+  }
+  function addCss(root, css) {
+    css = Stringer_exports.trim(css);
+    if (css.length === 0) return;
+    const sheet = new CSSStyleSheet();
+    sheet.replaceSync(css);
+    root.shadowRoot.adoptedStyleSheets.push(sheet);
   }
   return __toCommonJS(webitem_exports);
 })();
